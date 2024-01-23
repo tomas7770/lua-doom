@@ -11,6 +11,7 @@ set(WOOF_SOURCES
     d_items.c              d_items.h
     d_iwad.c               d_iwad.h
     d_loop.c               d_loop.h
+    d_lua.c                d_lua.h
     d_main.c               d_main.h
     d_net.c
                            d_player.h
@@ -167,6 +168,7 @@ target_link_libraries(woof PRIVATE
     SDL2_net::SDL2_net
     OpenAL::OpenAL
     SndFile::sndfile
+    ${LUA_LIBRARIES}
     opl
     textscreen)
 

@@ -70,6 +70,8 @@
 
 #include "dsdhacked.h"
 
+#include "d_lua.h"
+
 #include "net_client.h"
 #include "net_dedicated.h"
 
@@ -114,6 +116,8 @@ static void ProcessDehLump(int lumpnum)
 {
   ProcessDehFile(NULL, D_dehout(), lumpnum);
 }
+
+void ProcessLuaLump(int lumpnum);
 
 char **wadfiles;
 
@@ -2468,6 +2472,14 @@ void D_DoomMain(void)
   {
     D_ProcessInWads("UMAPINFO", U_ParseMapInfo, false);
   }
+
+  //!
+  // @category mod
+  //
+  // Lua lumps.
+  //
+
+  D_ProcessInWads("LUAHACK", ProcessLuaLump, false);
 
   V_InitColorTranslation(); //jff 4/24/98 load color translation lumps
 
