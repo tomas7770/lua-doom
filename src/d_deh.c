@@ -39,6 +39,11 @@
 
 #include "dsdhacked.h"
 
+#include "d_lua.h"
+
+extern lua_cptr lua_cptrs[];
+extern size_t lua_cptrs_count;
+
 static boolean bfgcells_modified = false;
 
 // killough 10/98: new functions, to allow processing DEH files in-memory
@@ -1868,6 +1873,21 @@ void deh_procBexCodePointers(DEHFILE *fpin, FILE* fpout, char *line)
               found = true;
             }
         } while (!found && (deh_bexptrs[i].cptr.v != NULL)); // [FG] lookup is never NULL!
+        // Look for Lua codepointer
+        i= -1;
+        do
+        {
+          ++i;
+          if (!strcasecmp(key,lua_cptrs[i].lookup))
+            {
+              states[indexnum].action_lua = lua_cptrs[i].cptr; // assign
+              if (fpout) fprintf(fpout,
+                                 " - applied %d from codeptr[%d] to states[%d]\n",
+                                 lua_cptrs[i].cptr,i,indexnum);
+              found = true;
+              states[indexnum].is_action_lua = true;
+            }
+        } while (!found && i < lua_cptrs_count);
 
       if (!found)
         if (fpout) fprintf(fpout,

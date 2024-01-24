@@ -33,6 +33,8 @@
 
 #include "p_action.h"
 
+#include "d_lua.h"
+
 #define LOWERSPEED   (FRACUNIT*6)
 #define RAISESPEED   (FRACUNIT*6)
 #define WEAPONBOTTOM (FRACUNIT*128)
@@ -126,12 +128,14 @@ void P_SetPspritePtr(player_t *player, pspdef_t *psp, statenum_t stnum)
 
       // Call action routine.
       // Modified handling.
-      if (state->action.p2)
-        {
-          state->action.p2(player, psp);
-          if (!psp->state)
-            break;
-        }
+      if (state->is_action_lua) {
+        CallLuaCptr(state->action_lua);
+      }
+      else if (state->action.p2) {
+        state->action.p2(player, psp);
+        if (!psp->state)
+          break;
+      }
       stnum = psp->state->nextstate;
     }
   while (!psp->tics);     // an initial state of 0 could cycle through

@@ -39,6 +39,8 @@
 #include "m_swap.h"
 #include "w_wad.h"
 
+#include "d_lua.h"
+
 // [FG] colored blood and gibs
 boolean colored_blood;
 boolean direct_vertical_aiming, default_direct_vertical_aiming;
@@ -89,8 +91,12 @@ boolean P_SetMobjState(mobj_t* mobj,statenum_t state)
       // Modified handling.
       // Call action functions when the state is set
 
-      if (st->action.p1)
-	st->action.p1(mobj);
+      if (st->is_action_lua) {
+        CallLuaCptr(st->action_lua);
+      }
+      else if (st->action.p1) {
+	      st->action.p1(mobj);
+      }
 
       seenstate[state] = 1 + st->nextstate;   // killough 4/9/98
 

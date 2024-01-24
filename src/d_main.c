@@ -117,8 +117,6 @@ static void ProcessDehLump(int lumpnum)
   ProcessDehFile(NULL, D_dehout(), lumpnum);
 }
 
-void ProcessLuaLump(int lumpnum);
-
 char **wadfiles;
 
 boolean devparm;        // started game with -devparm
@@ -2398,6 +2396,14 @@ void D_DoomMain(void)
   // Check for wolf levels
   haswolflevels = (W_CheckNumForName("map31") >= 0);
 
+  //!
+  // @category mod
+  //
+  // Lua lumps. Processed before DEHACKED to allow registering new codepointers.
+  //
+
+  D_ProcessInWads("LUAHACK", ProcessLuaLump, false);
+
   // process deh in IWAD
 
   //!
@@ -2472,14 +2478,6 @@ void D_DoomMain(void)
   {
     D_ProcessInWads("UMAPINFO", U_ParseMapInfo, false);
   }
-
-  //!
-  // @category mod
-  //
-  // Lua lumps.
-  //
-
-  D_ProcessInWads("LUAHACK", ProcessLuaLump, false);
 
   V_InitColorTranslation(); //jff 4/24/98 load color translation lumps
 

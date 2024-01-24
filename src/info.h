@@ -27,6 +27,9 @@
 // Needed for action function pointer handling.
 #include "d_think.h"
 
+// boolean
+#include "doomtype.h"
+
 #define MAXSTATEARGS 8
 
 // ********************************************************************
@@ -1264,6 +1267,8 @@ typedef struct
   long        misc1, misc2; // used for psprite positioning
   long        args[MAXSTATEARGS]; // [XA] mbf21 args
   int         flags;
+  int         action_lua;   // code pointer to function for action if it's a Lua function
+  boolean     is_action_lua;
 } state_t;
 
 //

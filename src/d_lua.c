@@ -2,6 +2,8 @@
 #include <lauxlib.h>
 #include <lualib.h>
 
+#include "d_lua.h"
+
 #include "m_io.h"
 
 #include "doomdef.h"
@@ -11,13 +13,48 @@
 #include "i_system.h" // I_Realloc
 
 #define LUA_BUFFER_START_SIZE 1024
+#define LUA_CPTRS_MAX 1024
+
+lua_State* L_state;
+
+lua_cptr lua_cptrs[LUA_CPTRS_MAX];
+size_t lua_cptrs_count = 0;
+
+static int l_registerCodepointer() {
+    const char* cptr_name = luaL_checkstring(L_state, 1);
+    int cptr = luaL_ref(L_state, LUA_REGISTRYINDEX);
+    int cptr_name_len = lua_rawlen(L_state, 1);
+
+    if (lua_cptrs_count >= LUA_CPTRS_MAX) {
+        // We have a problem
+        I_Error("Reached Lua codepointer limit");
+    }
+    if (cptr_name_len >= LUA_CPTR_NAME_SIZE) {
+        I_Error("Lua codepointer %s name exceeds maximum length", cptr_name);
+    }
+
+    strcpy(lua_cptrs[lua_cptrs_count].lookup, "A_");
+    memcpy(lua_cptrs[lua_cptrs_count].lookup+sizeof("A_")-1, cptr_name, cptr_name_len);
+    lua_cptrs[lua_cptrs_count].cptr = cptr;
+
+    lua_cptrs_count++;
+    return 0;
+}
+
+static void LoadLuahackFuncs() {
+    lua_pushcfunction(L_state, l_registerCodepointer);
+    lua_setglobal(L_state, "registerCodepointer");
+}
+
+void CloseLua() {
+    lua_close(L_state);
+}
 
 void ProcessLuaLump(int lumpnum)
 {
     MEMFILE* lump;
     int n;
     int error;
-    lua_State *L;
     char* inbuffer = (char*) malloc(sizeof(char)*LUA_BUFFER_START_SIZE);
     ssize_t lua_buffer_size = sizeof(char)*LUA_BUFFER_START_SIZE;
     int offset = 0;
@@ -28,8 +65,10 @@ void ProcessLuaLump(int lumpnum)
         lump = mem_fopen_read(buf, W_LumpLength(lumpnum));
     }
 
-    L = luaL_newstate();
-    luaL_openlibs(L);
+    L_state = luaL_newstate();
+    I_AtExit(CloseLua, true);
+    luaL_openlibs(L_state);
+    LoadLuahackFuncs();
 
     // loop until end of file
     while ((n = mem_fread(inbuffer+offset, sizeof(char), LUA_BUFFER_START_SIZE, lump)))
@@ -41,14 +80,19 @@ void ProcessLuaLump(int lumpnum)
         }
     }
     inbuffer[offset] = '\0';
-    error = luaL_loadbuffer(L, inbuffer, strlen(inbuffer), "LUAHACK") ||
-            lua_pcall(L, 0, 0, 0);
+    error = luaL_loadbuffer(L_state, inbuffer, strlen(inbuffer), "LUAHACK") ||
+            lua_pcall(L_state, 0, 0, 0);
     if (error) {
-        fprintf(stderr, "%s", lua_tostring(L, -1));
-        lua_pop(L, 1);  /* pop error message from the stack */
+        I_Error("%s", lua_tostring(L_state, -1));
     }
 
-    lua_close(L);
     mem_fclose(lump);
     free(inbuffer);
+}
+
+void CallLuaCptr(int cptr) {
+    lua_rawgeti(L_state, LUA_REGISTRYINDEX, cptr);
+    if (lua_pcall(L_state, 0, 0, 0) != 0) {
+        I_Error("%s", lua_tostring(L_state, -1));
+    }
 }
