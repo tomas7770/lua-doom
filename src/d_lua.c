@@ -20,10 +20,10 @@ lua_State* L_state;
 lua_cptr lua_cptrs[LUA_CPTRS_MAX];
 size_t lua_cptrs_count = 0;
 
-static int l_registerCodepointer() {
-    const char* cptr_name = luaL_checkstring(L_state, 1);
-    int cptr = luaL_ref(L_state, LUA_REGISTRYINDEX);
-    int cptr_name_len = lua_rawlen(L_state, 1);
+static int l_registerCodepointer(lua_State* L) {
+    const char* cptr_name = luaL_checkstring(L, 1);
+    int cptr = luaL_ref(L, LUA_REGISTRYINDEX);
+    int cptr_name_len = lua_rawlen(L, 1);
 
     if (lua_cptrs_count >= LUA_CPTRS_MAX) {
         // We have a problem
