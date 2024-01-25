@@ -92,7 +92,7 @@ boolean P_SetMobjState(mobj_t* mobj,statenum_t state)
       // Call action functions when the state is set
 
       if (st->is_action_lua) {
-        CallLuaCptr(st->action_lua);
+        CallLuaCptrP1(st->action_lua, mobj);
       }
       else if (st->action.p1) {
 	      st->action.p1(mobj);
