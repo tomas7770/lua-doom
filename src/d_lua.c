@@ -61,10 +61,14 @@ static mobj_t** NewMobj(lua_State* L, mobj_t* mobj) {
     return mobj_lua;
 }
 
-static mobj_t** CheckMobj(lua_State* L) {
-    void *ud = luaL_checkudata(L, 1, MOBJ_META);
-    luaL_argcheck(L, ud != NULL, 1, "'mobj' expected");
+static mobj_t** CheckMobjInIndex(lua_State* L, int index) {
+    void *ud = luaL_checkudata(L, index, MOBJ_META);
+    luaL_argcheck(L, ud != NULL, index, "'mobj' expected");
     return (mobj_t**) ud;
+}
+
+static mobj_t** CheckMobj(lua_State* L) {
+    return CheckMobjInIndex(L, 1);
 }
 
 // Is this necessary? Why not jump to another state with the intended codepointer?
@@ -210,6 +214,16 @@ static int l_mobjNewIndex(lua_State* L) {
     if (strcmp(key, "health") == 0) {
         int value = luaL_checkinteger(L, 3);
         (*mobj_lua)->health = value;
+    }
+    else if (strcmp(key, "target") == 0) {
+        mobj_t** new_target_lua;
+        if (lua_isnil(L, 3)) {
+            (*mobj_lua)->target = NULL;
+        }
+        else {
+            new_target_lua = CheckMobjInIndex(L, 3);
+            (*mobj_lua)->target = *new_target_lua;
+        }
     }
     else {
         luaL_argerror(L, 2, "invalid mobj attribute");
