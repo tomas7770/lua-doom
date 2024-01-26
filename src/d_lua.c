@@ -186,7 +186,7 @@ static int l_mobjIndex(lua_State* L) {
 
     const char* key = luaL_checkstring(L, 2);
     if (strcmp(key, "health") == 0) {
-        lua_pushnumber(L, (*mobj_lua)->health);
+        lua_pushinteger(L, (*mobj_lua)->health);
     }
     else if (strcmp(key, "target") == 0) {
         if ((*mobj_lua)->target) {
