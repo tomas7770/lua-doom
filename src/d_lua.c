@@ -46,6 +46,13 @@ static int l_registerCodepointer(lua_State* L) {
     return 0;
 }
 
+static int l_tofixed(lua_State* L) {
+    double x = luaL_checknumber(L, 1);
+    int result = FRACUNIT*x;
+    lua_pushinteger(L, result);
+    return 1;
+}
+
 static mobj_t** CheckMobj(lua_State* L) {
     void *ud = luaL_checkudata(L, 1, MOBJ_META);
     luaL_argcheck(L, ud != NULL, 1, "'mobj' expected");
@@ -137,6 +144,8 @@ static int l_mobjNewIndex(lua_State* L) {
 static void LoadLuahackFuncs() {
     lua_pushcfunction(L_state, l_registerCodepointer);
     lua_setglobal(L_state, "registerCodepointer");
+    lua_pushcfunction(L_state, l_tofixed);
+    lua_setglobal(L_state, "tofixed");
 }
 
 static const struct luaL_Reg mobj_lib[] = {
