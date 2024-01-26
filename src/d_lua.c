@@ -66,6 +66,19 @@ static int l_mobj_call(lua_State* L) {
     
     c_cptr = FindDehCodepointer(key);
     if (c_cptr.p1) {
+        // Count args and apply them
+        int j;
+        int extra_args = lua_gettop(L)-2;
+        for (j = 0; j < extra_args && j < MAXSTATEARGS; j++) {
+            int value;
+            if (lua_isnil(L, j+1+2)) {
+                // Skip arg
+                continue;
+            }
+            value = luaL_checkinteger(L, j+1+2);
+            (*mobj_lua)->state->args[j] = value;
+        }
+
         c_cptr.p1(*mobj_lua);
         found = true;
     }
