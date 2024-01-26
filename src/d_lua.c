@@ -197,6 +197,18 @@ static int l_mobjIndex(lua_State* L) {
             lua_pushnil(L);
         }
     }
+    else if (strcmp(key, "mass") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->info->mass);
+    }
+    else if (strcmp(key, "momx") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->momx);
+    }
+    else if (strcmp(key, "momy") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->momy);
+    }
+    else if (strcmp(key, "momz") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->momz);
+    }
     else {
         int v_type = luaL_getmetafield(L, 1, key);
         if (v_type == LUA_TNIL) {
@@ -224,6 +236,18 @@ static int l_mobjNewIndex(lua_State* L) {
             new_target_lua = CheckMobjInIndex(L, 3);
             (*mobj_lua)->target = *new_target_lua;
         }
+    }
+    else if (strcmp(key, "momx") == 0) {
+        int value = luaL_checkinteger(L, 3);
+        (*mobj_lua)->momx = value;
+    }
+    else if (strcmp(key, "momy") == 0) {
+        int value = luaL_checkinteger(L, 3);
+        (*mobj_lua)->momy = value;
+    }
+    else if (strcmp(key, "momz") == 0) {
+        int value = luaL_checkinteger(L, 3);
+        (*mobj_lua)->momz = value;
     }
     else {
         luaL_argerror(L, 2, "invalid mobj attribute");
