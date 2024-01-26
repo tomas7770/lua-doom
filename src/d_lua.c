@@ -48,7 +48,7 @@ static int l_registerCodepointer(lua_State* L) {
 
 static mobj_t** CheckMobj(lua_State* L) {
     void *ud = luaL_checkudata(L, 1, MOBJ_META);
-    luaL_argcheck(L, ud != NULL, 1, "`mobj' expected");
+    luaL_argcheck(L, ud != NULL, 1, "'mobj' expected");
     return (mobj_t**) ud;
 }
 
