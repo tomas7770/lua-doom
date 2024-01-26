@@ -59,6 +59,7 @@ static mobj_t** CheckMobj(lua_State* L) {
     return (mobj_t**) ud;
 }
 
+// Is this necessary? Why not jump to another state with the intended codepointer?
 static int l_mobj_call(lua_State* L) {
     // Similar to the codepointer lookup code from d_deh.c
     char key[LUA_CPTR_NAME_SIZE];
@@ -83,6 +84,9 @@ static int l_mobj_call(lua_State* L) {
                 continue;
             }
             value = luaL_checkinteger(L, j+1+2);
+            // Changes the state globally for all mobjs of this type, quite a hack...
+            // If a mobj gets a reference to another mobj, it can call this!
+            // Misc1 and Misc2 not covered (MBF codepointers)
             (*mobj_lua)->state->args[j] = value;
         }
 
