@@ -76,7 +76,9 @@ static int l_mobj_call(lua_State* L) {
     if (c_cptr.p1) {
         // Count args and apply them
         int j;
+        long orig_args[MAXSTATEARGS];
         int extra_args = lua_gettop(L)-2;
+        memcpy(orig_args, (*mobj_lua)->state->args, sizeof(orig_args));
         for (j = 0; j < extra_args && j < MAXSTATEARGS; j++) {
             int value;
             if (lua_isnil(L, j+1+2)) {
@@ -85,12 +87,13 @@ static int l_mobj_call(lua_State* L) {
             }
             value = luaL_checkinteger(L, j+1+2);
             // Changes the state globally for all mobjs of this type, quite a hack...
-            // If a mobj gets a reference to another mobj, it can call this!
+            // But atleast it's restored later
             // Misc1 and Misc2 not covered (MBF codepointers)
             (*mobj_lua)->state->args[j] = value;
         }
 
         c_cptr.p1(*mobj_lua);
+        memcpy((*mobj_lua)->state->args, orig_args, sizeof(orig_args)); // restore state args
         found = true;
     }
     else {
