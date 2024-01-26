@@ -53,6 +53,14 @@ static int l_tofixed(lua_State* L) {
     return 1;
 }
 
+static mobj_t** NewMobj(lua_State* L, mobj_t* mobj) {
+    mobj_t** mobj_lua = (mobj_t**) lua_newuserdata(L, sizeof(mobj_t*));
+    luaL_getmetatable(L, MOBJ_META);
+    lua_setmetatable(L, -2); // set mobj metatable
+    *mobj_lua = mobj;
+    return mobj_lua;
+}
+
 static mobj_t** CheckMobj(lua_State* L) {
     void *ud = luaL_checkudata(L, 1, MOBJ_META);
     luaL_argcheck(L, ud != NULL, 1, "'mobj' expected");
@@ -176,6 +184,15 @@ static int l_mobjIndex(lua_State* L) {
     if (strcmp(key, "health") == 0) {
         lua_pushnumber(L, (*mobj_lua)->health);
     }
+    else if (strcmp(key, "target") == 0) {
+        if ((*mobj_lua)->target) {
+            NewMobj(L, (*mobj_lua)->target);
+            lua_pushvalue(L, -1);
+        }
+        else {
+            lua_pushnil(L);
+        }
+    }
     else {
         int v_type = luaL_getmetafield(L, 1, key);
         if (v_type == LUA_TNIL) {
@@ -278,13 +295,8 @@ void ProcessLuaLump(int lumpnum)
 }
 
 void CallLuaCptrP1(int cptr, mobj_t* mobj) {
-    mobj_t** mobj_lua;
-
     lua_rawgeti(L_state, LUA_REGISTRYINDEX, cptr);
-    mobj_lua = (mobj_t**) lua_newuserdata(L_state, sizeof(mobj_t*));
-    luaL_getmetatable(L_state, MOBJ_META);
-    lua_setmetatable(L_state, -2); // set mobj metatable
-    *mobj_lua = mobj;
+    NewMobj(L_state, mobj);
     if (lua_pcall(L_state, 1, 0, 0) != 0) {
         I_Error("%s", lua_tostring(L_state, -1));
     }
