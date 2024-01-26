@@ -12,6 +12,9 @@
 #include "memio.h"
 #include "i_system.h" // I_Realloc
 
+extern actionf_t FindDehCodepointer(const char* key);
+extern char *ptr_lstrip(char *p);
+
 #define LUA_BUFFER_START_SIZE 1024
 #define LUA_CPTRS_MAX 1024
 
@@ -49,6 +52,43 @@ static mobj_t** CheckMobj(lua_State* L) {
     return (mobj_t**) ud;
 }
 
+static int l_mobj_call(lua_State* L) {
+    // Similar to the codepointer lookup code from d_deh.c
+    char key[LUA_CPTR_NAME_SIZE];
+    actionf_t c_cptr;
+    mobj_t** mobj_lua = CheckMobj(L);
+    const char* cptr_name = luaL_checkstring(L, 2);
+    boolean found = false;
+    int i = -1; // incremented to start at zero at the top of the loop
+    
+    strcpy(key,"A_");  // reusing the key area to prefix the mnemonic
+    strcat(key, ptr_lstrip((char*) cptr_name));
+    
+    c_cptr = FindDehCodepointer(key);
+    if (c_cptr.p1) {
+        c_cptr.p1(*mobj_lua);
+        found = true;
+    }
+    else {
+        // Look for Lua codepointer
+        do
+        {
+            ++i;
+            if (!strcasecmp(key, lua_cptrs[i].lookup))
+            {
+                CallLuaCptrP1(lua_cptrs[i].cptr, *mobj_lua);
+                found = true;
+            }
+        } while (!found && i < lua_cptrs_count);
+    }
+
+    if (!found) {
+        luaL_argerror(L, 2, "codepointer not found");
+    }
+
+    return 0;
+}
+
 static int l_mobjIndex(lua_State* L) {
     mobj_t** mobj_lua = CheckMobj(L);
 
@@ -57,7 +97,10 @@ static int l_mobjIndex(lua_State* L) {
         lua_pushnumber(L, (*mobj_lua)->health);
     }
     else {
-        luaL_argerror(L, 2, "invalid mobj attribute");
+        int v_type = luaL_getmetafield(L, 1, key);
+        if (v_type == LUA_TNIL) {
+            luaL_argerror(L, 2, "invalid mobj attribute");
+        }
     }
 
     return 1;
@@ -83,8 +126,15 @@ static void LoadLuahackFuncs() {
     lua_setglobal(L_state, "registerCodepointer");
 }
 
+static const struct luaL_Reg mobj_lib[] = {
+    {"call", l_mobj_call},
+    {NULL, NULL}
+};
+
 static void LoadMobjMetatable() {
     luaL_newmetatable(L_state, MOBJ_META);
+
+    luaL_setfuncs(L_state, mobj_lib, 0);
 
     lua_pushstring(L_state, "__index");
     lua_pushcfunction(L_state, l_mobjIndex);

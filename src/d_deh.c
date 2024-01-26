@@ -3409,6 +3409,19 @@ void PostProcessDeh(void)
   dsdh_FreeTables();
 }
 
+actionf_t FindDehCodepointer(const char* key) {
+  int i = -1; // incremented to start at zero at the top of the loop
+  do  // Ty 05/16/98 - fix loop logic to look for null ending entry
+  {
+      ++i;
+      if (!strcasecmp(key,deh_bexptrs[i].lookup))
+      {
+          return deh_bexptrs[i].cptr;
+      }
+  } while ((deh_bexptrs[i].cptr.v != NULL)); // [FG] lookup is never NULL!
+  return (actionf_t) {.v = NULL, .p1 = NULL, .p2 = NULL};
+}
+
 //---------------------------------------------------------------------
 //
 // $Log: d_deh.c,v $
