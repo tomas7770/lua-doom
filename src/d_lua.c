@@ -88,7 +88,6 @@ static int l_mobj_call(lua_State* L) {
             value = luaL_checkinteger(L, j+1+2);
             // Changes the state globally for all mobjs of this type, quite a hack...
             // But atleast it's restored later
-            // Misc1 and Misc2 not covered (MBF codepointers)
             (*mobj_lua)->state->args[j] = value;
         }
 
@@ -107,6 +106,60 @@ static int l_mobj_call(lua_State* L) {
                 found = true;
             }
         } while (!found && i < lua_cptrs_count);
+    }
+
+    if (!found) {
+        luaL_argerror(L, 2, "codepointer not found");
+    }
+
+    return 0;
+}
+
+// call(...) but for Misc1/Misc2 arguments (only valid for built-in codepointers)
+static int l_mobj_callMisc(lua_State* L) {
+    char key[LUA_CPTR_NAME_SIZE];
+    actionf_t c_cptr;
+    mobj_t** mobj_lua = CheckMobj(L);
+    const char* cptr_name = luaL_checkstring(L, 2);
+    boolean found = false;
+    
+    strcpy(key,"A_");  // reusing the key area to prefix the mnemonic
+    strcat(key, ptr_lstrip((char*) cptr_name));
+    
+    c_cptr = FindDehCodepointer(key);
+    if (c_cptr.p1) {
+        // Count args and apply them
+        int j;
+        long orig_misc1, orig_misc2;
+        int extra_args = lua_gettop(L)-2;
+        orig_misc1 = (*mobj_lua)->state->misc1;
+        orig_misc2 = (*mobj_lua)->state->misc2;
+        for (j = 0; j < extra_args && j < 2; j++) {
+            int value;
+            if (lua_isnil(L, j+1+2)) {
+                // Skip arg
+                continue;
+            }
+            value = luaL_checkinteger(L, j+1+2);
+            // Changes the state globally for all mobjs of this type, quite a hack...
+            // But atleast it's restored later
+            switch (j) {
+                case 0:
+                    (*mobj_lua)->state->misc1 = value;
+                    break;
+                case 1:
+                    (*mobj_lua)->state->misc2 = value;
+                    break;
+                default:
+                    // This isn't going to happen...
+                    break;
+            }
+        }
+
+        c_cptr.p1(*mobj_lua);
+        (*mobj_lua)->state->misc1 = orig_misc1; // restore state args
+        (*mobj_lua)->state->misc2 = orig_misc2;
+        found = true;
     }
 
     if (!found) {
@@ -157,6 +210,7 @@ static void LoadLuahackFuncs() {
 
 static const struct luaL_Reg mobj_lib[] = {
     {"call", l_mobj_call},
+    {"callMisc", l_mobj_callMisc},
     {NULL, NULL}
 };
 
