@@ -28,5 +28,6 @@
 
 # Visual Studio CMake integration directories.
 /.vs/
+/.vscode/
 /out/
 CMakeSettings.json
