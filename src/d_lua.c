@@ -273,6 +273,8 @@ static void LoadLuahackFuncs() {
 }
 
 static const struct luaL_Reg mobj_lib[] = {
+    {"__index", l_mobjIndex},
+    {"__newindex", l_mobjNewIndex},
     {"call", l_mobj_call},
     {"callMisc", l_mobj_callMisc},
     {"checkSight", l_mobj_checkSight},
@@ -283,14 +285,6 @@ static void LoadMobjMetatable() {
     luaL_newmetatable(L_state, MOBJ_META);
 
     luaL_setfuncs(L_state, mobj_lib, 0);
-
-    lua_pushstring(L_state, "__index");
-    lua_pushcfunction(L_state, l_mobjIndex);
-    lua_rawset(L_state, -3); // set metatable.__index
-
-    lua_pushstring(L_state, "__newindex");
-    lua_pushcfunction(L_state, l_mobjNewIndex);
-    lua_rawset(L_state, -3); // set metatable.__newindex
 }
 
 void CloseLua() {
