@@ -14,6 +14,7 @@
 
 extern actionf_t FindDehCodepointer(const char* key);
 extern char *ptr_lstrip(char *p);
+extern boolean P_CheckSight(mobj_t *t1, mobj_t *t2);
 
 #define LUA_BUFFER_START_SIZE 1024
 #define LUA_CPTRS_MAX 1024
@@ -181,6 +182,14 @@ static int l_mobj_callMisc(lua_State* L) {
     return 0;
 }
 
+static int l_mobj_checkSight(lua_State* L) {
+    mobj_t** mobj_lua = CheckMobj(L);
+    mobj_t** mobj2_lua = CheckMobjInIndex(L, 2);
+    boolean result = P_CheckSight(*mobj_lua, *mobj2_lua);
+    lua_pushboolean(L, result);
+    return 1;
+}
+
 static int l_mobjIndex(lua_State* L) {
     mobj_t** mobj_lua = CheckMobj(L);
 
@@ -266,6 +275,7 @@ static void LoadLuahackFuncs() {
 static const struct luaL_Reg mobj_lib[] = {
     {"call", l_mobj_call},
     {"callMisc", l_mobj_callMisc},
+    {"checkSight", l_mobj_checkSight},
     {NULL, NULL}
 };
 
