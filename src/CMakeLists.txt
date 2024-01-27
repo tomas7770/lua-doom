@@ -13,6 +13,7 @@ set(WOOF_SOURCES
     d_loop.c               d_loop.h
     d_lua.c                d_lua.h
     d_lua_mobj.c           d_lua_mobj.h
+    d_lua_player.c         d_lua_player.h
     d_main.c               d_main.h
     d_net.c
                            d_player.h

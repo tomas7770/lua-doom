@@ -129,7 +129,7 @@ void P_SetPspritePtr(player_t *player, pspdef_t *psp, statenum_t stnum)
       // Call action routine.
       // Modified handling.
       if (state->is_action_lua) {
-        CallLuaCptrP2(state->action_lua);
+        CallLuaCptrP2(state->action_lua, player);
       }
       else if (state->action.p2) {
         state->action.p2(player, psp);

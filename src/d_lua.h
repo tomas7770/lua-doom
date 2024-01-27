@@ -2,6 +2,7 @@
 #define __D_LUA__
 
 #include "p_mobj.h"
+#include "d_player.h"
 
 #define LUA_CPTR_NAME_SIZE 128
 
@@ -12,6 +13,6 @@ typedef struct {
 
 void ProcessLuaLump(int lumpnum);
 void CallLuaCptrP1(int cptr, mobj_t* mobj);
-void CallLuaCptrP2(int cptr);
+void CallLuaCptrP2(int cptr, player_t* player);
 
 #endif

@@ -4,6 +4,7 @@
 
 #include "d_lua.h"
 #include "d_lua_mobj.h"
+#include "d_lua_player.h"
 
 #include "m_io.h"
 
@@ -66,6 +67,7 @@ static void OpenLua() {
     luaL_openlibs(L_state);
     LoadLuahackFuncs();
     LoadMobjMetatable(L_state);
+    LoadPlayerMetatable(L_state);
 }
 
 void ProcessLuaLump(int lumpnum)
@@ -113,9 +115,10 @@ void CallLuaCptrP1(int cptr, mobj_t* mobj) {
     }
 }
 
-void CallLuaCptrP2(int cptr) {
+void CallLuaCptrP2(int cptr, player_t* player) {
     lua_rawgeti(L_state, LUA_REGISTRYINDEX, cptr);
-    if (lua_pcall(L_state, 0, 0, 0) != 0) {
+    NewPlayer(L_state, player);
+    if (lua_pcall(L_state, 1, 0, 0) != 0) {
         I_Error("%s", lua_tostring(L_state, -1));
     }
 }
