@@ -265,6 +265,13 @@ static int l_mobjNewIndex(lua_State* L) {
     return 0;
 }
 
+static int l_mobjEq(lua_State* L) {
+    mobj_t** mobj_lua = CheckMobj(L);
+    mobj_t** mobj2_lua = CheckMobjInIndex(L, 2);
+    lua_pushboolean(L, *mobj_lua == *mobj2_lua);
+    return 1;
+}
+
 static void LoadLuahackFuncs() {
     lua_pushcfunction(L_state, l_registerCodepointer);
     lua_setglobal(L_state, "registerCodepointer");
@@ -275,6 +282,7 @@ static void LoadLuahackFuncs() {
 static const struct luaL_Reg mobj_lib[] = {
     {"__index", l_mobjIndex},
     {"__newindex", l_mobjNewIndex},
+    {"__eq", l_mobjEq},
     {"call", l_mobj_call},
     {"callMisc", l_mobj_callMisc},
     {"checkSight", l_mobj_checkSight},
