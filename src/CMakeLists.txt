@@ -12,6 +12,7 @@ set(WOOF_SOURCES
     d_iwad.c               d_iwad.h
     d_loop.c               d_loop.h
     d_lua.c                d_lua.h
+    d_lua_mobj.c           d_lua_mobj.h
     d_main.c               d_main.h
     d_net.c
                            d_player.h
