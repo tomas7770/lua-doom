@@ -31,7 +31,6 @@ static int l_playerIndex(lua_State* L) {
     if (strcmp(key, "mo") == 0) {
         if ((*player_lua)->mo) {
             NewMobj(L, (*player_lua)->mo);
-            lua_pushvalue(L, -1);
         }
         else {
             lua_pushnil(L);
