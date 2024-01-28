@@ -176,6 +176,14 @@ static int l_mobjIndex(lua_State* L) {
             lua_pushnil(L);
         }
     }
+    else if (strcmp(key, "tracer") == 0) {
+        if ((*mobj_lua)->tracer) {
+            NewMobj(L, (*mobj_lua)->tracer);
+        }
+        else {
+            lua_pushnil(L);
+        }
+    }
     else if (strcmp(key, "mass") == 0) {
         lua_pushinteger(L, (*mobj_lua)->info->mass);
     }
@@ -214,6 +222,16 @@ static int l_mobjNewIndex(lua_State* L) {
         else {
             new_target_lua = CheckMobjInIndex(L, 3);
             P_SetTarget(&((*mobj_lua)->target), *new_target_lua);
+        }
+    }
+    else if (strcmp(key, "tracer") == 0) {
+        mobj_t** new_tracer_lua;
+        if (lua_isnil(L, 3)) {
+            P_SetTarget(&((*mobj_lua)->tracer), NULL);
+        }
+        else {
+            new_tracer_lua = CheckMobjInIndex(L, 3);
+            P_SetTarget(&((*mobj_lua)->tracer), *new_tracer_lua);
         }
     }
     else if (strcmp(key, "momx") == 0) {
