@@ -4,6 +4,8 @@
 #include "d_lua.h"
 #include "d_lua_mobj.h"
 
+#include "p_inter.h"
+
 extern actionf_t FindDehCodepointer(const char* key);
 extern char *ptr_lstrip(char *p);
 extern boolean P_CheckSight(mobj_t *t1, mobj_t *t2);
@@ -149,6 +151,15 @@ static int l_mobj_checkSight(lua_State* L) {
     return 1;
 }
 
+static int l_mobj_takeDamage(lua_State* L) {
+    mobj_t** mobj_lua = CheckMobj(L);
+    mobj_t** inflictor_lua = CheckMobjInIndex(L, 2);
+    mobj_t** source_lua = CheckMobjInIndex(L, 3);
+    int damage = luaL_checkinteger(L, 4);
+    P_DamageMobj(*mobj_lua, *inflictor_lua, *source_lua, damage);
+    return 0;
+}
+
 static int l_mobjIndex(lua_State* L) {
     mobj_t** mobj_lua = CheckMobj(L);
 
@@ -238,6 +249,7 @@ static const struct luaL_Reg mobj_lib[] = {
     {"call", l_mobj_call},
     {"callMisc", l_mobj_callMisc},
     {"checkSight", l_mobj_checkSight},
+    {"takeDamage", l_mobj_takeDamage},
     {NULL, NULL}
 };
 
