@@ -171,7 +171,6 @@ static int l_mobjIndex(lua_State* L) {
     else if (strcmp(key, "target") == 0) {
         if ((*mobj_lua)->target) {
             NewMobj(L, (*mobj_lua)->target);
-            lua_pushvalue(L, -1);
         }
         else {
             lua_pushnil(L);
