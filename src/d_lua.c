@@ -23,9 +23,16 @@ lua_cptr lua_cptrs[LUA_CPTRS_MAX];
 size_t lua_cptrs_count = 0;
 
 static int l_registerCodepointer(lua_State* L) {
+    int cptr, cptr_name_len;
     const char* cptr_name = luaL_checkstring(L, 1);
-    int cptr = luaL_ref(L, LUA_REGISTRYINDEX);
-    int cptr_name_len = lua_rawlen(L, 1);
+
+    if (lua_gettop(L) != 2) {
+        luaL_error(L, "registerCodepointer: expected 2 arguments");
+    }
+
+    luaL_argexpected(L, lua_isfunction(L, 2), 2, "function");
+    cptr = luaL_ref(L, LUA_REGISTRYINDEX);
+    cptr_name_len = lua_rawlen(L, 1);
 
     if (lua_cptrs_count >= LUA_CPTRS_MAX) {
         // We have a problem
