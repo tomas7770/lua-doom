@@ -5,6 +5,7 @@
 #include "d_lua_mobj.h"
 
 #include "p_inter.h"
+#include "p_tick.h"
 
 extern actionf_t FindDehCodepointer(const char* key);
 extern char *ptr_lstrip(char *p);
@@ -209,11 +210,11 @@ static int l_mobjNewIndex(lua_State* L) {
     else if (strcmp(key, "target") == 0) {
         mobj_t** new_target_lua;
         if (lua_isnil(L, 3)) {
-            (*mobj_lua)->target = NULL;
+            P_SetTarget(&((*mobj_lua)->target), NULL);
         }
         else {
             new_target_lua = CheckMobjInIndex(L, 3);
-            (*mobj_lua)->target = *new_target_lua;
+            P_SetTarget(&((*mobj_lua)->target), *new_target_lua);
         }
     }
     else if (strcmp(key, "momx") == 0) {
