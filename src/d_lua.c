@@ -57,11 +57,63 @@ static int l_tofixed(lua_State* L) {
     return 1;
 }
 
+static int l_fixedToAngle(lua_State* L) {
+    fixed_t x = luaL_checkinteger(L, 1);
+    int result = FixedToAngle(x);
+    lua_pushinteger(L, result);
+    return 1;
+}
+
+static int l_angleToFixed(lua_State* L) {
+    angle_t x = luaL_checkinteger(L, 1);
+    int result = AngleToFixed(x);
+    lua_pushinteger(L, result);
+    return 1;
+}
+
+static int l_tan(lua_State* L) {
+    angle_t an = luaL_checkinteger(L, 1);
+    an += ANG90;
+    an >>= ANGLETOFINESHIFT;
+    lua_pushinteger(L, finetangent[an % (FINEANGLES/2)]);
+    return 1;
+}
+
+static int l_sin(lua_State* L) {
+    angle_t an = luaL_checkinteger(L, 1);
+    an >>= ANGLETOFINESHIFT;
+    lua_pushinteger(L, finesine[an % FINEANGLES]);
+    return 1;
+}
+
+static int l_cos(lua_State* L) {
+    angle_t an = luaL_checkinteger(L, 1);
+    an >>= ANGLETOFINESHIFT;
+    lua_pushinteger(L, finecosine[an % FINEANGLES]);
+    return 1;
+}
+
 static void LoadLuahackFuncs() {
     lua_pushcfunction(L_state, l_registerCodepointer);
     lua_setglobal(L_state, "registerCodepointer");
+
     lua_pushcfunction(L_state, l_tofixed);
     lua_setglobal(L_state, "tofixed");
+
+    lua_pushcfunction(L_state, l_fixedToAngle);
+    lua_setglobal(L_state, "fixedToAngle");
+
+    lua_pushcfunction(L_state, l_angleToFixed);
+    lua_setglobal(L_state, "angleToFixed");
+
+    lua_pushcfunction(L_state, l_tan);
+    lua_setglobal(L_state, "tan");
+
+    lua_pushcfunction(L_state, l_sin);
+    lua_setglobal(L_state, "sin");
+
+    lua_pushcfunction(L_state, l_cos);
+    lua_setglobal(L_state, "cos");
 }
 
 void CloseLua() {
