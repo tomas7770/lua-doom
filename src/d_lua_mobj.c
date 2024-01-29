@@ -6,10 +6,10 @@
 
 #include "p_inter.h"
 #include "p_tick.h"
+#include "p_map.h"
 
 extern actionf_t FindDehCodepointer(const char* key);
 extern char *ptr_lstrip(char *p);
-extern boolean P_CheckSight(mobj_t *t1, mobj_t *t2);
 
 extern lua_cptr lua_cptrs[];
 extern size_t lua_cptrs_count;
@@ -161,6 +161,15 @@ static int l_mobj_takeDamage(lua_State* L) {
     return 0;
 }
 
+static int l_mobj_radiusAttack(lua_State* L) {
+    mobj_t** mobj_lua = CheckMobj(L);
+    mobj_t** source_lua = CheckMobjInIndex(L, 2);
+    int damage = luaL_checkinteger(L, 3);
+    int distance = luaL_checkinteger(L, 4);
+    P_RadiusAttack(*mobj_lua, *source_lua, damage, distance);
+    return 0;
+}
+
 static int l_mobjIndex(lua_State* L) {
     mobj_t** mobj_lua = CheckMobj(L);
 
@@ -275,6 +284,7 @@ static const struct luaL_Reg mobj_lib[] = {
     {"callMisc", l_mobj_callMisc},
     {"checkSight", l_mobj_checkSight},
     {"takeDamage", l_mobj_takeDamage},
+    {"radiusAttack", l_mobj_radiusAttack},
     {NULL, NULL}
 };
 
