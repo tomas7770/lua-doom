@@ -7,6 +7,7 @@
 #include "p_inter.h"
 #include "p_tick.h"
 #include "p_map.h"
+#include "p_maputl.h"
 
 extern actionf_t FindDehCodepointer(const char* key);
 extern char *ptr_lstrip(char *p);
@@ -170,6 +171,16 @@ static int l_mobj_radiusAttack(lua_State* L) {
     return 0;
 }
 
+static int l_mobj_setPos(lua_State* L) {
+    mobj_t** mobj_lua = CheckMobj(L);
+    P_UnsetThingPosition(*mobj_lua);
+    (*mobj_lua)->x = luaL_optinteger(L, 2, (*mobj_lua)->x);
+    (*mobj_lua)->y = luaL_optinteger(L, 3, (*mobj_lua)->y);
+    (*mobj_lua)->z = luaL_optinteger(L, 4, (*mobj_lua)->z);
+    P_SetThingPosition(*mobj_lua);
+    return 0;
+}
+
 static int l_mobjIndex(lua_State* L) {
     mobj_t** mobj_lua = CheckMobj(L);
 
@@ -207,6 +218,15 @@ static int l_mobjIndex(lua_State* L) {
     }
     else if (strcmp(key, "angle") == 0) {
         lua_pushinteger(L, (*mobj_lua)->angle);
+    }
+    else if (strcmp(key, "x") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->x);
+    }
+    else if (strcmp(key, "y") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->y);
+    }
+    else if (strcmp(key, "z") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->z);
     }
     else {
         int v_type = luaL_getmetafield(L, 1, key);
@@ -285,6 +305,7 @@ static const struct luaL_Reg mobj_lib[] = {
     {"checkSight", l_mobj_checkSight},
     {"takeDamage", l_mobj_takeDamage},
     {"radiusAttack", l_mobj_radiusAttack},
+    {"setPos", l_mobj_setPos},
     {NULL, NULL}
 };
 
