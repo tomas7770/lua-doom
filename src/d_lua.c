@@ -93,6 +93,24 @@ static int l_cos(lua_State* L) {
     return 1;
 }
 
+static int l_spawnMobj(lua_State* L) {
+    mobj_t* mo;
+    int type = luaL_checkinteger(L, 1);
+    fixed_t x = luaL_checkinteger(L, 2);
+    fixed_t y = luaL_checkinteger(L, 3);
+    fixed_t z = luaL_checkinteger(L, 4);
+    type -= 1;
+
+    mo = P_SpawnMobj(x, y, z, type);
+    if (!mo) {
+        // This shouldn't happen, I think...
+        luaL_error(L, "Failed to spawn mobj");
+    }
+
+    NewMobj(L, mo);
+    return 1;
+}
+
 static void LoadLuahackFuncs() {
     lua_pushcfunction(L_state, l_registerCodepointer);
     lua_setglobal(L_state, "registerCodepointer");
@@ -114,6 +132,9 @@ static void LoadLuahackFuncs() {
 
     lua_pushcfunction(L_state, l_cos);
     lua_setglobal(L_state, "cos");
+
+    lua_pushcfunction(L_state, l_spawnMobj);
+    lua_setglobal(L_state, "spawnMobj");
 }
 
 void CloseLua() {
