@@ -171,6 +171,23 @@ static int l_mobj_radiusAttack(lua_State* L) {
     return 0;
 }
 
+static int l_mobj_spawnMissile(lua_State* L) {
+    mobj_t* mo;
+    mobj_t** mobj_lua = CheckMobj(L);
+    mobj_t** dest_lua = CheckMobjInIndex(L, 2);
+    int type = luaL_checkinteger(L, 3);
+    type -= 1;
+
+    mo = P_SpawnMissile(*mobj_lua, *dest_lua, type);
+    if (!mo) {
+        // This shouldn't happen, I think...
+        luaL_error(L, "Failed to spawn mobj");
+    }
+
+    NewMobj(L, mo);
+    return 1;
+}
+
 static int l_mobj_setPos(lua_State* L) {
     mobj_t** mobj_lua = CheckMobj(L);
     P_UnsetThingPosition(*mobj_lua);
@@ -305,6 +322,7 @@ static const struct luaL_Reg mobj_lib[] = {
     {"checkSight", l_mobj_checkSight},
     {"takeDamage", l_mobj_takeDamage},
     {"radiusAttack", l_mobj_radiusAttack},
+    {"spawnMissile", l_mobj_spawnMissile},
     {"setPos", l_mobj_setPos},
     {NULL, NULL}
 };
