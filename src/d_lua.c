@@ -58,6 +58,14 @@ static int l_tofixed(lua_State* L) {
     return 1;
 }
 
+static int l_fromfixed(lua_State* L) {
+    int x = luaL_checkinteger(L, 1);
+    lua_pushnumber(L, x);
+    lua_pushnumber(L, FRACUNIT);
+    lua_arith(L, LUA_OPDIV);
+    return 1;
+}
+
 static int l_fixedToAngle(lua_State* L) {
     fixed_t x = luaL_checkinteger(L, 1);
     int result = FixedToAngle(x);
@@ -123,6 +131,9 @@ static void LoadLuahackFuncs() {
 
     lua_pushcfunction(L_state, l_tofixed);
     lua_setglobal(L_state, "tofixed");
+
+    lua_pushcfunction(L_state, l_fromfixed);
+    lua_setglobal(L_state, "fromfixed");
 
     lua_pushcfunction(L_state, l_fixedToAngle);
     lua_setglobal(L_state, "fixedToAngle");
