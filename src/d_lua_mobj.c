@@ -35,8 +35,7 @@ static mobj_t** CheckMobj(lua_State* L) {
     return CheckMobjInIndex(L, 1);
 }
 
-// Is this necessary? Why not jump to another state with the intended codepointer?
-static int l_mobj_call(lua_State* L) {
+static int l_mobj_callGeneric(lua_State* L, boolean is_misc) {
     // Similar to the codepointer lookup code from d_deh.c
     char key[LUA_CPTR_NAME_SIZE];
     actionf_t c_cptr;
@@ -53,9 +52,18 @@ static int l_mobj_call(lua_State* L) {
         // Count args and apply them
         int j;
         long orig_args[MAXSTATEARGS];
+        long orig_misc1, orig_misc2;
         int extra_args = lua_gettop(L)-2;
-        memcpy(orig_args, (*mobj_lua)->state->args, sizeof(orig_args));
-        for (j = 0; j < extra_args && j < MAXSTATEARGS; j++) {
+
+        if (is_misc) {
+            orig_misc1 = (*mobj_lua)->state->misc1;
+            orig_misc2 = (*mobj_lua)->state->misc2;
+        }
+        else {
+            memcpy(orig_args, (*mobj_lua)->state->args, sizeof(orig_args));
+        }
+
+        for (j = 0; j < extra_args && j < (is_misc ? 2 : MAXSTATEARGS); j++) {
             int value;
             if (lua_isnil(L, j+1+2)) {
                 // Skip arg
@@ -64,14 +72,36 @@ static int l_mobj_call(lua_State* L) {
             value = luaL_checkinteger(L, j+1+2);
             // Changes the state globally for all mobjs of this type, quite a hack...
             // But atleast it's restored later
-            (*mobj_lua)->state->args[j] = value;
+            if (is_misc) {
+                switch (j) {
+                    case 0:
+                        (*mobj_lua)->state->misc1 = value;
+                        break;
+                    case 1:
+                        (*mobj_lua)->state->misc2 = value;
+                        break;
+                    default:
+                        // This isn't going to happen...
+                        break;
+                }
+            }
+            else {
+                (*mobj_lua)->state->args[j] = value;
+            }
         }
 
         c_cptr.p1(*mobj_lua);
-        memcpy((*mobj_lua)->state->args, orig_args, sizeof(orig_args)); // restore state args
+        // Restore state args
+        if (is_misc) {
+            (*mobj_lua)->state->misc1 = orig_misc1;
+            (*mobj_lua)->state->misc2 = orig_misc2;
+        }
+        else {
+            memcpy((*mobj_lua)->state->args, orig_args, sizeof(orig_args));
+        }
         found = true;
     }
-    else {
+    else if (!is_misc) {
         // Look for Lua codepointer
         do
         {
@@ -91,58 +121,13 @@ static int l_mobj_call(lua_State* L) {
     return 0;
 }
 
+static int l_mobj_call(lua_State* L) {
+    return l_mobj_callGeneric(L, false);
+}
+
 // call(...) but for Misc1/Misc2 arguments (only valid for built-in codepointers)
 static int l_mobj_callMisc(lua_State* L) {
-    char key[LUA_CPTR_NAME_SIZE];
-    actionf_t c_cptr;
-    mobj_t** mobj_lua = CheckMobj(L);
-    const char* cptr_name = luaL_checkstring(L, 2);
-    boolean found = false;
-    
-    strcpy(key,"A_");  // reusing the key area to prefix the mnemonic
-    strcat(key, ptr_lstrip((char*) cptr_name));
-    
-    c_cptr = FindDehCodepointer(key);
-    if (c_cptr.p1) {
-        // Count args and apply them
-        int j;
-        long orig_misc1, orig_misc2;
-        int extra_args = lua_gettop(L)-2;
-        orig_misc1 = (*mobj_lua)->state->misc1;
-        orig_misc2 = (*mobj_lua)->state->misc2;
-        for (j = 0; j < extra_args && j < 2; j++) {
-            int value;
-            if (lua_isnil(L, j+1+2)) {
-                // Skip arg
-                continue;
-            }
-            value = luaL_checkinteger(L, j+1+2);
-            // Changes the state globally for all mobjs of this type, quite a hack...
-            // But atleast it's restored later
-            switch (j) {
-                case 0:
-                    (*mobj_lua)->state->misc1 = value;
-                    break;
-                case 1:
-                    (*mobj_lua)->state->misc2 = value;
-                    break;
-                default:
-                    // This isn't going to happen...
-                    break;
-            }
-        }
-
-        c_cptr.p1(*mobj_lua);
-        (*mobj_lua)->state->misc1 = orig_misc1; // restore state args
-        (*mobj_lua)->state->misc2 = orig_misc2;
-        found = true;
-    }
-
-    if (!found) {
-        luaL_argerror(L, 2, "codepointer not found");
-    }
-
-    return 0;
+    return l_mobj_callGeneric(L, true);
 }
 
 static int l_mobj_checkSight(lua_State* L) {
