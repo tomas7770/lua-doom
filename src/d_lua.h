@@ -13,6 +13,6 @@ typedef struct {
 
 void ProcessLuaLump(int lumpnum);
 void CallLuaCptrP1(int cptr, mobj_t* mobj);
-void CallLuaCptrP2(int cptr, player_t* player);
+void CallLuaCptrP2(int cptr, player_t* player, pspdef_t* psp);
 
 #endif

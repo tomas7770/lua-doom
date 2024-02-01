@@ -5,6 +5,7 @@
 #include "d_lua.h"
 #include "d_lua_mobj.h"
 #include "d_lua_player.h"
+#include "d_lua_pspr.h"
 
 #include "m_io.h"
 #include "m_random.h"
@@ -168,6 +169,7 @@ static void OpenLua() {
     LoadLuahackFuncs();
     LoadMobjMetatable(L_state);
     LoadPlayerMetatable(L_state);
+    LoadPsprMetatable(L_state);
 }
 
 void ProcessLuaLump(int lumpnum)
@@ -215,10 +217,11 @@ void CallLuaCptrP1(int cptr, mobj_t* mobj) {
     }
 }
 
-void CallLuaCptrP2(int cptr, player_t* player) {
+void CallLuaCptrP2(int cptr, player_t* player, pspdef_t* psp) {
     lua_rawgeti(L_state, LUA_REGISTRYINDEX, cptr);
     NewPlayer(L_state, player);
-    if (lua_pcall(L_state, 1, 0, 0) != 0) {
+    NewPspr(L_state, psp);
+    if (lua_pcall(L_state, 2, 0, 0) != 0) {
         I_Error("%s", lua_tostring(L_state, -1));
     }
 }
