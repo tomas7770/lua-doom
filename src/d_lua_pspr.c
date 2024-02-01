@@ -13,7 +13,7 @@ pspdef_t** NewPspr(lua_State* L, pspdef_t* psp) {
     return psp_lua;
 }
 
-static pspdef_t** CheckPsprInIndex(lua_State* L, int index) {
+pspdef_t** CheckPsprInIndex(lua_State* L, int index) {
     void *ud = luaL_checkudata(L, index, PSPR_META);
     luaL_argcheck(L, ud != NULL, index, "'pspr' expected");
     return (pspdef_t**) ud;
