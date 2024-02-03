@@ -158,6 +158,20 @@ static void LoadLuahackFuncs() {
     lua_setglobal(L_state, "spawnMobj");
 }
 
+static void LoadLuahackConsts(lua_State* L) {
+    // Cheats
+    lua_pushinteger(L, CF_NOCLIP);
+    lua_setglobal(L, "cheatsNoclip");
+    lua_pushinteger(L, CF_GODMODE);
+    lua_setglobal(L, "cheatsGod");
+    lua_pushinteger(L, CF_NOMOMENTUM);
+    lua_setglobal(L, "cheatsNomomentum");
+    lua_pushinteger(L, CF_BUDDHA);
+    lua_setglobal(L, "cheatsBuddha");
+    lua_pushinteger(L, CF_NOTARGET);
+    lua_setglobal(L, "cheatsNotarget");
+}
+
 void CloseLua() {
     lua_close(L_state);
 }
@@ -167,6 +181,7 @@ static void OpenLua() {
     I_AtExit(CloseLua, true);
     luaL_openlibs(L_state);
     LoadLuahackFuncs();
+    LoadLuahackConsts(L_state);
     LoadMobjMetatable(L_state);
     LoadPlayerMetatable(L_state);
     LoadPsprMetatable(L_state);

@@ -89,6 +89,16 @@ static int l_player_call(lua_State* L) {
     return 0;
 }
 
+static int l_player_getCheat(lua_State* L) {
+    player_t** player_lua = CheckPlayer(L);
+    int cheat = luaL_checkinteger(L, 2);
+    if (cheat < 0 || cheat > CF_NOTARGET) {
+        luaL_argerror(L, 2, "invalid cheat");
+    }
+    lua_pushboolean(L, ((*player_lua)->cheats & cheat) ? true : false);
+    return 1;
+}
+
 static int l_playerIndex(lua_State* L) {
     player_t** player_lua = CheckPlayer(L);
 
@@ -122,6 +132,7 @@ static const struct luaL_Reg player_lib[] = {
     {"__index", l_playerIndex},
     {"__eq", l_playerEq},
     {"call", l_player_call},
+    {"getCheat", l_player_getCheat},
     {NULL, NULL}
 };
 
