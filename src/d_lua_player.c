@@ -99,6 +99,16 @@ static int l_player_getCheat(lua_State* L) {
     return 1;
 }
 
+static int l_player_getPower(lua_State* L) {
+    player_t** player_lua = CheckPlayer(L);
+    int power = luaL_checkinteger(L, 2);
+    if (power < 0 || power >= NUMPOWERS) {
+        luaL_argerror(L, 2, "invalid power");
+    }
+    lua_pushinteger(L, (*player_lua)->powers[power]);
+    return 1;
+}
+
 static int l_playerIndex(lua_State* L) {
     player_t** player_lua = CheckPlayer(L);
 
@@ -133,6 +143,7 @@ static const struct luaL_Reg player_lib[] = {
     {"__eq", l_playerEq},
     {"call", l_player_call},
     {"getCheat", l_player_getCheat},
+    {"getPower", l_player_getPower},
     {NULL, NULL}
 };
 

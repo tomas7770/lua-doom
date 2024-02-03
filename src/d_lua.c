@@ -170,6 +170,19 @@ static void LoadLuahackConsts(lua_State* L) {
     lua_setglobal(L, "cheatsBuddha");
     lua_pushinteger(L, CF_NOTARGET);
     lua_setglobal(L, "cheatsNotarget");
+    // Powers
+    lua_pushinteger(L, pw_invulnerability);
+    lua_setglobal(L, "powersInvul");
+    lua_pushinteger(L, pw_strength);
+    lua_setglobal(L, "powersBerserk");
+    lua_pushinteger(L, pw_invisibility);
+    lua_setglobal(L, "powersInvis");
+    lua_pushinteger(L, pw_ironfeet);
+    lua_setglobal(L, "powersRad");
+    lua_pushinteger(L, pw_allmap);
+    lua_setglobal(L, "powersMap");
+    lua_pushinteger(L, pw_infrared);
+    lua_setglobal(L, "powersLight");
 }
 
 void CloseLua() {
