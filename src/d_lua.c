@@ -16,6 +16,8 @@
 #include "memio.h"
 #include "i_system.h" // I_Realloc
 
+extern skill_t gameskill;
+
 #define LUA_BUFFER_START_SIZE 1024
 #define LUA_CPTRS_MAX 1024
 
@@ -126,6 +128,11 @@ static int l_spawnMobj(lua_State* L) {
     return 1;
 }
 
+static int l_getGameSkill(lua_State* L) {
+    lua_pushinteger(L, gameskill);
+    return 1;
+}
+
 static void LoadLuahackFuncs() {
     lua_pushcfunction(L_state, l_registerCodepointer);
     lua_setglobal(L_state, "registerCodepointer");
@@ -156,6 +163,9 @@ static void LoadLuahackFuncs() {
 
     lua_pushcfunction(L_state, l_spawnMobj);
     lua_setglobal(L_state, "spawnMobj");
+
+    lua_pushcfunction(L_state, l_getGameSkill);
+    lua_setglobal(L_state, "getGameSkill");
 }
 
 static void LoadLuahackConsts(lua_State* L) {
@@ -183,6 +193,17 @@ static void LoadLuahackConsts(lua_State* L) {
     lua_setglobal(L, "powersMap");
     lua_pushinteger(L, pw_infrared);
     lua_setglobal(L, "powersLight");
+    // Skill levels
+    lua_pushinteger(L, sk_baby);
+    lua_setglobal(L, "skBaby");
+    lua_pushinteger(L, sk_easy);
+    lua_setglobal(L, "skEasy");
+    lua_pushinteger(L, sk_medium);
+    lua_setglobal(L, "skMedium");
+    lua_pushinteger(L, sk_hard);
+    lua_setglobal(L, "skHard");
+    lua_pushinteger(L, sk_nightmare);
+    lua_setglobal(L, "skNightmare");
 }
 
 void CloseLua() {
