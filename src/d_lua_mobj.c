@@ -213,6 +213,9 @@ static int l_mobjIndex(lua_State* L) {
     if (strcmp(key, "health") == 0) {
         lua_pushinteger(L, (*mobj_lua)->health);
     }
+    else if (strcmp(key, "spawnhealth") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->info->spawnhealth);
+    }
     else if (strcmp(key, "target") == 0) {
         if ((*mobj_lua)->target) {
             NewMobj(L, (*mobj_lua)->target);
