@@ -184,6 +184,28 @@ static int l_mobj_setPos(lua_State* L) {
     return 0;
 }
 
+static int l_mobj_aimLineAttack(lua_State* L) {
+    fixed_t slope;
+    boolean skip_friends;
+    mobj_t** mobj_lua = CheckMobj(L);
+    angle_t angle = luaL_checkinteger(L, 2);
+    fixed_t distance = luaL_optinteger(L, 3, MISSILERANGE);
+    skip_friends = lua_isboolean(L, 4) ? lua_toboolean(L, 4) : false;
+    slope = P_AimLineAttack(*mobj_lua, angle, distance, skip_friends ? MF_FRIEND : 0);
+    lua_pushinteger(L, slope);
+    return 1;
+}
+
+static int l_mobj_lineAttack(lua_State* L) {
+    mobj_t** mobj_lua = CheckMobj(L);
+    angle_t angle = luaL_checkinteger(L, 2);
+    fixed_t distance = luaL_optinteger(L, 3, MISSILERANGE);
+    fixed_t slope = luaL_checkinteger(L, 4);
+    int damage = luaL_checkinteger(L, 5);
+    P_LineAttack(*mobj_lua, angle, distance, slope, damage);
+    return 0;
+}
+
 static int l_mobjIndex(lua_State* L) {
     mobj_t** mobj_lua = CheckMobj(L);
 
@@ -310,6 +332,8 @@ static const struct luaL_Reg mobj_lib[] = {
     {"radiusAttack", l_mobj_radiusAttack},
     {"spawnMissile", l_mobj_spawnMissile},
     {"setPos", l_mobj_setPos},
+    {"aimLineAttack", l_mobj_aimLineAttack},
+    {"lineAttack", l_mobj_lineAttack},
     {NULL, NULL}
 };
 
