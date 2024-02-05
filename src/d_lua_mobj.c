@@ -54,13 +54,14 @@ static int l_mobj_callGeneric(lua_State* L, boolean is_misc) {
         long orig_args[MAXSTATEARGS];
         long orig_misc1, orig_misc2;
         int extra_args = lua_gettop(L)-2;
+        state_t* orig_state = (*mobj_lua)->state;
 
         if (is_misc) {
-            orig_misc1 = (*mobj_lua)->state->misc1;
-            orig_misc2 = (*mobj_lua)->state->misc2;
+            orig_misc1 = orig_state->misc1;
+            orig_misc2 = orig_state->misc2;
         }
         else {
-            memcpy(orig_args, (*mobj_lua)->state->args, sizeof(orig_args));
+            memcpy(orig_args, orig_state->args, sizeof(orig_args));
         }
 
         for (j = 0; j < extra_args && j < (is_misc ? 2 : MAXSTATEARGS); j++) {
@@ -75,10 +76,10 @@ static int l_mobj_callGeneric(lua_State* L, boolean is_misc) {
             if (is_misc) {
                 switch (j) {
                     case 0:
-                        (*mobj_lua)->state->misc1 = value;
+                        orig_state->misc1 = value;
                         break;
                     case 1:
-                        (*mobj_lua)->state->misc2 = value;
+                        orig_state->misc2 = value;
                         break;
                     default:
                         // This isn't going to happen...
@@ -86,18 +87,18 @@ static int l_mobj_callGeneric(lua_State* L, boolean is_misc) {
                 }
             }
             else {
-                (*mobj_lua)->state->args[j] = value;
+                orig_state->args[j] = value;
             }
         }
 
         c_cptr.p1(*mobj_lua);
         // Restore state args
         if (is_misc) {
-            (*mobj_lua)->state->misc1 = orig_misc1;
-            (*mobj_lua)->state->misc2 = orig_misc2;
+            orig_state->misc1 = orig_misc1;
+            orig_state->misc2 = orig_misc2;
         }
         else {
-            memcpy((*mobj_lua)->state->args, orig_args, sizeof(orig_args));
+            memcpy(orig_state->args, orig_args, sizeof(orig_args));
         }
         found = true;
     }

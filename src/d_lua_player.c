@@ -50,7 +50,8 @@ static int l_player_call(lua_State* L) {
         int j;
         long orig_args[MAXSTATEARGS];
         int extra_args = lua_gettop(L)-3;
-        memcpy(orig_args, (*psp_lua)->state->args, sizeof(orig_args));
+        state_t* orig_state = (*psp_lua)->state;
+        memcpy(orig_args, orig_state->args, sizeof(orig_args));
 
         for (j = 0; j < extra_args && j < MAXSTATEARGS; j++) {
             int value;
@@ -61,12 +62,12 @@ static int l_player_call(lua_State* L) {
             value = luaL_checkinteger(L, j+1+3);
             // Changes the state globally for all psprs of this type, quite a hack...
             // But atleast it's restored later
-            (*psp_lua)->state->args[j] = value;
+            orig_state->args[j] = value;
         }
 
         c_cptr.p2(*player_lua, *psp_lua);
         // Restore state args
-        memcpy((*psp_lua)->state->args, orig_args, sizeof(orig_args));
+        memcpy(orig_state->args, orig_args, sizeof(orig_args));
         found = true;
     }
     else {
