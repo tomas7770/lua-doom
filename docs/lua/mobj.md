@@ -12,6 +12,7 @@ Represents a thing/actor that exists in the game world.
 | tracer | Mobj or nil | Y | Used by some projectiles, e.g. Revenant missile, to track a Mobj. |
 | mass | int | N | Mass, affects physics. |
 | meleerange | int | N | Melee attack range. |
+| radius | int | N | Mobj radius. |
 | momx | fixed_t | Y | X component of velocity in global coordinates. |
 | momy | fixed_t | Y | Y component of velocity in global coordinates. |
 | momz | fixed_t | Y | Z component of velocity in global coordinates. |
