@@ -11,6 +11,7 @@ Represents a thing/actor that exists in the game world.
 | target | Mobj or nil | Y | For monsters, the Mobj they want to attack. For projectiles, the Mobj who shot them. |
 | tracer | Mobj or nil | Y | Used by some projectiles, e.g. Revenant missile, to track a Mobj. |
 | mass | int | N | Mass, affects physics. |
+| meleerange | int | N | Melee attack range. |
 | momx | fixed_t | Y | X component of velocity in global coordinates. |
 | momy | fixed_t | Y | Y component of velocity in global coordinates. |
 | momz | fixed_t | Y | Z component of velocity in global coordinates. |

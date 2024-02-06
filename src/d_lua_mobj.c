@@ -235,6 +235,9 @@ static int l_mobjIndex(lua_State* L) {
     else if (strcmp(key, "mass") == 0) {
         lua_pushinteger(L, (*mobj_lua)->info->mass);
     }
+    else if (strcmp(key, "meleerange") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->info->meleerange);
+    }
     else if (strcmp(key, "momx") == 0) {
         lua_pushinteger(L, (*mobj_lua)->momx);
     }
