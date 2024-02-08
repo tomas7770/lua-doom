@@ -1,0 +1,3 @@
+function AuxLibTest()
+	print("Auxiliary lib success")
+end

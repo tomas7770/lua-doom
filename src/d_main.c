@@ -1568,6 +1568,11 @@ static void D_AutoloadIWadDir()
   {
     char *autoload_dir;
 
+    // common auto-loaded files for all IWADs
+    autoload_dir = GetAutoloadDir(*base, "all", true);
+    AutoLoadWADs(autoload_dir);
+    free(autoload_dir);
+
     // common auto-loaded files for all Doom flavors
     if (gamemission < pack_chex)
     {
