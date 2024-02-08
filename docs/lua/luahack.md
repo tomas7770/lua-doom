@@ -2,7 +2,7 @@
 
 LUAHACK is the lump at the heart of LuaDoom's functionality. It's where all Lua code is written.
 
-**Currently, only 1 LUAHACK lump is supported at a time.** Loading multiple WADs with LUAHACK lumps is undefined, untested behavior. Make sure to read the [Don't](#dont) section for other things you shouldn't do.
+Make sure to read the [Don't](#dont) section for things you shouldn't do.
 
 ## Defining new DeHackEd codepointers
 

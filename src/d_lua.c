@@ -21,7 +21,7 @@ extern skill_t gameskill;
 #define LUA_BUFFER_START_SIZE 1024
 #define LUA_CPTRS_MAX 1024
 
-lua_State* L_state;
+lua_State* L_state = NULL;
 
 lua_cptr lua_cptrs[LUA_CPTRS_MAX];
 size_t lua_cptrs_count = 0;
@@ -133,39 +133,39 @@ static int l_getGameSkill(lua_State* L) {
     return 1;
 }
 
-static void LoadLuahackFuncs() {
-    lua_pushcfunction(L_state, l_registerCodepointer);
-    lua_setglobal(L_state, "registerCodepointer");
+static void LoadLuahackFuncs(lua_State* L) {
+    lua_pushcfunction(L, l_registerCodepointer);
+    lua_setglobal(L, "registerCodepointer");
 
-    lua_pushcfunction(L_state, l_tofixed);
-    lua_setglobal(L_state, "tofixed");
+    lua_pushcfunction(L, l_tofixed);
+    lua_setglobal(L, "tofixed");
 
-    lua_pushcfunction(L_state, l_fromfixed);
-    lua_setglobal(L_state, "fromfixed");
+    lua_pushcfunction(L, l_fromfixed);
+    lua_setglobal(L, "fromfixed");
 
-    lua_pushcfunction(L_state, l_fixedToAngle);
-    lua_setglobal(L_state, "fixedToAngle");
+    lua_pushcfunction(L, l_fixedToAngle);
+    lua_setglobal(L, "fixedToAngle");
 
-    lua_pushcfunction(L_state, l_angleToFixed);
-    lua_setglobal(L_state, "angleToFixed");
+    lua_pushcfunction(L, l_angleToFixed);
+    lua_setglobal(L, "angleToFixed");
 
-    lua_pushcfunction(L_state, l_tan);
-    lua_setglobal(L_state, "tan");
+    lua_pushcfunction(L, l_tan);
+    lua_setglobal(L, "tan");
 
-    lua_pushcfunction(L_state, l_sin);
-    lua_setglobal(L_state, "sin");
+    lua_pushcfunction(L, l_sin);
+    lua_setglobal(L, "sin");
 
-    lua_pushcfunction(L_state, l_cos);
-    lua_setglobal(L_state, "cos");
+    lua_pushcfunction(L, l_cos);
+    lua_setglobal(L, "cos");
 
-    lua_pushcfunction(L_state, l_random);
-    lua_setglobal(L_state, "random");
+    lua_pushcfunction(L, l_random);
+    lua_setglobal(L, "random");
 
-    lua_pushcfunction(L_state, l_spawnMobj);
-    lua_setglobal(L_state, "spawnMobj");
+    lua_pushcfunction(L, l_spawnMobj);
+    lua_setglobal(L, "spawnMobj");
 
-    lua_pushcfunction(L_state, l_getGameSkill);
-    lua_setglobal(L_state, "getGameSkill");
+    lua_pushcfunction(L, l_getGameSkill);
+    lua_setglobal(L, "getGameSkill");
 }
 
 static void LoadLuahackConsts(lua_State* L) {
@@ -211,10 +211,13 @@ void CloseLua() {
 }
 
 static void OpenLua() {
+    if (L_state) {
+        return;
+    }
     L_state = luaL_newstate();
     I_AtExit(CloseLua, true);
     luaL_openlibs(L_state);
-    LoadLuahackFuncs();
+    LoadLuahackFuncs(L_state);
     LoadLuahackConsts(L_state);
     LoadMobjMetatable(L_state);
     LoadPlayerMetatable(L_state);
