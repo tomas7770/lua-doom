@@ -62,41 +62,41 @@ These aren't really new types, just a different interpretation of existing ones.
 
 `skill_t (int)`: Game skill level. The following **global constants** exist for this:
 
-- `skBaby`: I'm too young to die.
+- `SK_BABY`: I'm too young to die.
 
-- `skEasy`: Hey, not too rough.
+- `SK_EASY`: Hey, not too rough.
 
-- `skMedium`: Hurt me plenty.
+- `SK_MEDIUM`: Hurt me plenty.
 
-- `skHard`: Ultra-Violence.
+- `SK_HARD`: Ultra-Violence.
 
-- `skNightmare`: Nightmare!
+- `SK_NIGHTMARE`: Nightmare!
 
 `cheat_t (int)`: Cheat code identifier. The following **global constants** exist for this:
 
-- `cheatsNoclip`
+- `CHEATS_NOCLIP`
 
-- `cheatsGod`
+- `CHEATS_GOD`
 
-- `cheatsNomomentum`
+- `CHEATS_NOMOMENTUM`
 
-- `cheatsBuddha`
+- `CHEATS_BUDDHA`
 
-- `cheatsNotarget`
+- `CHEATS_NOTARGET`
 
 `powertype_t (int)`: Powerup identifier. The following **global constants** exist for this:
 
-- `powersInvul`: Invulnerability
+- `POWERS_INVUL`: Invulnerability
 
-- `powersBerserk`: Berserk
+- `POWERS_BERSERK`: Berserk
 
-- `powersInvis`: Partial invisibility
+- `POWERS_INVIS`: Partial invisibility
 
-- `powersRad`: Radiation shielding suit
+- `POWERS_RAD`: Radiation shielding suit
 
-- `powersMap`: Computer area map
+- `POWERS_MAP`: Computer area map
 
-- `powersLight`: Light amplification visor
+- `POWERS_LIGHT`: Light amplification visor
 
 ## Don't...
 

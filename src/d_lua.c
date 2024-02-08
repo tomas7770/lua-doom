@@ -208,39 +208,39 @@ static void LoadLuahackFuncs(lua_State* L) {
 static void LoadLuahackConsts(lua_State* L) {
     // Cheats
     lua_pushinteger(L, CF_NOCLIP);
-    lua_setglobal(L, "cheatsNoclip");
+    lua_setglobal(L, "CHEATS_NOCLIP");
     lua_pushinteger(L, CF_GODMODE);
-    lua_setglobal(L, "cheatsGod");
+    lua_setglobal(L, "CHEATS_GOD");
     lua_pushinteger(L, CF_NOMOMENTUM);
-    lua_setglobal(L, "cheatsNomomentum");
+    lua_setglobal(L, "CHEATS_NOMOMENTUM");
     lua_pushinteger(L, CF_BUDDHA);
-    lua_setglobal(L, "cheatsBuddha");
+    lua_setglobal(L, "CHEATS_BUDDHA");
     lua_pushinteger(L, CF_NOTARGET);
-    lua_setglobal(L, "cheatsNotarget");
+    lua_setglobal(L, "CHEATS_NOTARGET");
     // Powers
     lua_pushinteger(L, pw_invulnerability);
-    lua_setglobal(L, "powersInvul");
+    lua_setglobal(L, "POWERS_INVUL");
     lua_pushinteger(L, pw_strength);
-    lua_setglobal(L, "powersBerserk");
+    lua_setglobal(L, "POWERS_BERSERK");
     lua_pushinteger(L, pw_invisibility);
-    lua_setglobal(L, "powersInvis");
+    lua_setglobal(L, "POWERS_INVIS");
     lua_pushinteger(L, pw_ironfeet);
-    lua_setglobal(L, "powersRad");
+    lua_setglobal(L, "POWERS_RAD");
     lua_pushinteger(L, pw_allmap);
-    lua_setglobal(L, "powersMap");
+    lua_setglobal(L, "POWERS_MAP");
     lua_pushinteger(L, pw_infrared);
-    lua_setglobal(L, "powersLight");
+    lua_setglobal(L, "POWERS_LIGHT");
     // Skill levels
     lua_pushinteger(L, sk_baby);
-    lua_setglobal(L, "skBaby");
+    lua_setglobal(L, "SK_BABY");
     lua_pushinteger(L, sk_easy);
-    lua_setglobal(L, "skEasy");
+    lua_setglobal(L, "SK_EASY");
     lua_pushinteger(L, sk_medium);
-    lua_setglobal(L, "skMedium");
+    lua_setglobal(L, "SK_MEDIUM");
     lua_pushinteger(L, sk_hard);
-    lua_setglobal(L, "skHard");
+    lua_setglobal(L, "SK_HARD");
     lua_pushinteger(L, sk_nightmare);
-    lua_setglobal(L, "skNightmare");
+    lua_setglobal(L, "SK_NIGHTMARE");
 }
 
 void CloseLua() {
