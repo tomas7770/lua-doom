@@ -33,11 +33,13 @@ static player_t** CheckPlayer(lua_State* L) {
 static int l_player_call(lua_State* L) {
     char key[LUA_CPTR_NAME_SIZE];
     actionf_t c_cptr;
+    int j;
     player_t** player_lua = CheckPlayer(L);
     pspdef_t** psp_lua = CheckPsprInIndex(L, 2);
     const char* cptr_name = luaL_checkstring(L, 3);
     boolean found = false;
     int i = -1; // incremented to start at zero at the top of the loop
+    int extra_args = lua_gettop(L)-3;
     
     strcpy(key,"A_");  // reusing the key area to prefix the mnemonic
     strcat(key, ptr_lstrip((char*) cptr_name));
@@ -45,9 +47,7 @@ static int l_player_call(lua_State* L) {
     c_cptr = FindDehCodepointer(key);
     if (c_cptr.p2) {
         // Count args and apply them
-        int j;
         long orig_args[MAXSTATEARGS];
-        int extra_args = lua_gettop(L)-3;
         state_t* orig_state = (*psp_lua)->state;
         memcpy(orig_args, orig_state->args, sizeof(orig_args));
 
@@ -70,12 +70,16 @@ static int l_player_call(lua_State* L) {
     }
     else {
         // Look for Lua codepointer
+        long args[MAXSTATEARGS] = {0};
+        for (j = 0; j < extra_args && j < MAXSTATEARGS; j++) {
+            args[j] = luaL_optinteger(L, j+1+2, 0);
+        }
         do
         {
             ++i;
             if (!strcasecmp(key, lua_cptrs[i].lookup))
             {
-                CallLuaCptrP2(lua_cptrs[i].cptr, *player_lua, *psp_lua);
+                CallLuaCptrP2(lua_cptrs[i].cptr, *player_lua, *psp_lua, args);
                 found = true;
             }
         } while (!found && i < lua_cptrs_count);

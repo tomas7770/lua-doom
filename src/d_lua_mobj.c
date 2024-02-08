@@ -37,10 +37,12 @@ static int l_mobj_callGeneric(lua_State* L, boolean is_misc) {
     // Similar to the codepointer lookup code from d_deh.c
     char key[LUA_CPTR_NAME_SIZE];
     actionf_t c_cptr;
+    int j;
     mobj_t** mobj_lua = CheckMobj(L);
     const char* cptr_name = luaL_checkstring(L, 2);
     boolean found = false;
     int i = -1; // incremented to start at zero at the top of the loop
+    int extra_args = lua_gettop(L)-2;
     
     strcpy(key,"A_");  // reusing the key area to prefix the mnemonic
     strcat(key, ptr_lstrip((char*) cptr_name));
@@ -48,10 +50,8 @@ static int l_mobj_callGeneric(lua_State* L, boolean is_misc) {
     c_cptr = FindDehCodepointer(key);
     if (c_cptr.p1) {
         // Count args and apply them
-        int j;
         long orig_args[MAXSTATEARGS];
         long orig_misc1, orig_misc2;
-        int extra_args = lua_gettop(L)-2;
         state_t* orig_state = (*mobj_lua)->state;
 
         if (is_misc) {
@@ -102,12 +102,16 @@ static int l_mobj_callGeneric(lua_State* L, boolean is_misc) {
     }
     else if (!is_misc) {
         // Look for Lua codepointer
+        long args[MAXSTATEARGS] = {0};
+        for (j = 0; j < extra_args && j < MAXSTATEARGS; j++) {
+            args[j] = luaL_optinteger(L, j+1+2, 0);
+        }
         do
         {
             ++i;
             if (!strcasecmp(key, lua_cptrs[i].lookup))
             {
-                CallLuaCptrP1(lua_cptrs[i].cptr, *mobj_lua);
+                CallLuaCptrP1(lua_cptrs[i].cptr, *mobj_lua, args);
                 found = true;
             }
         } while (!found && i < lua_cptrs_count);

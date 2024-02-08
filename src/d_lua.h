@@ -12,7 +12,7 @@ typedef struct {
 } lua_cptr;
 
 void ProcessLuaLump(int lumpnum);
-void CallLuaCptrP1(int cptr, mobj_t* mobj);
-void CallLuaCptrP2(int cptr, player_t* player, pspdef_t* psp);
+void CallLuaCptrP1(int cptr, mobj_t* mobj, long args[]);
+void CallLuaCptrP2(int cptr, player_t* player, pspdef_t* psp, long args[]);
 
 #endif

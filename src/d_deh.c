@@ -3383,6 +3383,9 @@ void PostProcessDeh(void)
   {
     for (i = 0; i < num_states; i++)
     {
+      if (states[i].is_action_lua) {
+        continue;
+      }
       bexptr_match = &null_bexptr;
 
       for (j = 0; deh_bexptrs[j].cptr.v != NULL; ++j)

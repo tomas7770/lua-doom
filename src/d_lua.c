@@ -298,19 +298,27 @@ void ProcessLuaLump(int lumpnum)
     free(inbuffer);
 }
 
-void CallLuaCptrP1(int cptr, mobj_t* mobj) {
+void CallLuaCptrP1(int cptr, mobj_t* mobj, long args[]) {
+    int j = 0;
     lua_rawgeti(L_state, LUA_REGISTRYINDEX, cptr);
     NewMobj(L_state, mobj);
-    if (lua_pcall(L_state, 1, 0, 0) != 0) {
+    for (j = 0; j < MAXSTATEARGS; j++) {
+        lua_pushinteger(L_state, args[j]);
+    }
+    if (lua_pcall(L_state, 1 + MAXSTATEARGS, 0, 0) != 0) {
         I_Error("%s", lua_tostring(L_state, -1));
     }
 }
 
-void CallLuaCptrP2(int cptr, player_t* player, pspdef_t* psp) {
+void CallLuaCptrP2(int cptr, player_t* player, pspdef_t* psp, long args[]) {
+    int j = 0;
     lua_rawgeti(L_state, LUA_REGISTRYINDEX, cptr);
     NewPlayer(L_state, player);
     NewPspr(L_state, psp);
-    if (lua_pcall(L_state, 2, 0, 0) != 0) {
+    for (j = 0; j < MAXSTATEARGS; j++) {
+        lua_pushinteger(L_state, args[j]);
+    }
+    if (lua_pcall(L_state, 2 + MAXSTATEARGS, 0, 0) != 0) {
         I_Error("%s", lua_tostring(L_state, -1));
     }
 }

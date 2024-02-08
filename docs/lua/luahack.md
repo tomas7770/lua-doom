@@ -14,7 +14,7 @@ Using LUAHACK, it's possible to define new codepointers as Lua functions, for us
 
  - `string name`: Name to use in the DEHACKED lump.
 
- - `function f`: Lua function to be called as codepointer. For actor functions, takes 1 argument of type `Mobj`. For weapons functions, takes a `Player` followed by a `Pspr`.
+ - `function f`: Lua function to be called as codepointer. For actor functions, takes 1 argument of type `Mobj`. For weapons functions, takes a `Player` followed by a `Pspr`. Any other arguments have their value set to MBF21 arguments defined in the DEHACKED.
 
 `nil registerMobjMethod(string name, function f)`: Registers a Lua function for use as a `Mobj` method. This is so that you can call the function with the syntax `mobjVariable:name()` instead of `name(mobjVariable)`.
 
