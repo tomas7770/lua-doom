@@ -98,6 +98,16 @@ These aren't really new types, just a different interpretation of existing ones.
 
 - `POWERS_LIGHT`: Light amplification visor
 
+`mobjflag_t (int)`: Actor flag. You can find a list [here](/src/p_mobj.h#L108). **Global constants** exist in the same format as the list:
+
+- `MF_SPECIAL`
+
+- `MF_SOLID`
+
+- etc.
+
+`mobjflag2_t (int)`: MBF21 actor flag. You can find a list [here](/src/p_mobj.h#L202). **Global constants** exist in the same format as the list.
+
 ## Don't...
 
 - Use global variables for game logic. These persist after starting a new game or loading a save file. Best case scenario, you break demo/multiplayer support. Worst case scenario, the game bugs out unpredictably or crashes.

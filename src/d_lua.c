@@ -225,6 +225,58 @@ static void LoadLuahackConsts(lua_State* L) {
     lua_pushinteger(L, sk_medium); lua_setglobal(L, "SK_MEDIUM");
     lua_pushinteger(L, sk_hard); lua_setglobal(L, "SK_HARD");
     lua_pushinteger(L, sk_nightmare); lua_setglobal(L, "SK_NIGHTMARE");
+    // Mobj flags
+    lua_pushinteger(L, MF_SPECIAL); lua_setglobal(L, "MF_SPECIAL");
+    lua_pushinteger(L, MF_SOLID); lua_setglobal(L, "MF_SOLID");
+    lua_pushinteger(L, MF_SHOOTABLE); lua_setglobal(L, "MF_SHOOTABLE");
+    lua_pushinteger(L, MF_NOSECTOR); lua_setglobal(L, "MF_NOSECTOR");
+    lua_pushinteger(L, MF_NOBLOCKMAP); lua_setglobal(L, "MF_NOBLOCKMAP");
+    lua_pushinteger(L, MF_AMBUSH); lua_setglobal(L, "MF_AMBUSH");
+    lua_pushinteger(L, MF_JUSTHIT); lua_setglobal(L, "MF_JUSTHIT");
+    lua_pushinteger(L, MF_JUSTATTACKED); lua_setglobal(L, "MF_JUSTATTACKED");
+    lua_pushinteger(L, MF_SPAWNCEILING); lua_setglobal(L, "MF_SPAWNCEILING");
+    lua_pushinteger(L, MF_NOGRAVITY); lua_setglobal(L, "MF_NOGRAVITY");
+    lua_pushinteger(L, MF_DROPOFF); lua_setglobal(L, "MF_DROPOFF");
+    lua_pushinteger(L, MF_PICKUP); lua_setglobal(L, "MF_PICKUP");
+    lua_pushinteger(L, MF_NOCLIP); lua_setglobal(L, "MF_NOCLIP");
+    lua_pushinteger(L, MF_SLIDE); lua_setglobal(L, "MF_SLIDE");
+    lua_pushinteger(L, MF_FLOAT); lua_setglobal(L, "MF_FLOAT");
+    lua_pushinteger(L, MF_TELEPORT); lua_setglobal(L, "MF_TELEPORT");
+    lua_pushinteger(L, MF_MISSILE); lua_setglobal(L, "MF_MISSILE");
+    lua_pushinteger(L, MF_DROPPED); lua_setglobal(L, "MF_DROPPED");
+    lua_pushinteger(L, MF_SHADOW); lua_setglobal(L, "MF_SHADOW");
+    lua_pushinteger(L, MF_NOBLOOD); lua_setglobal(L, "MF_NOBLOOD");
+    lua_pushinteger(L, MF_CORPSE); lua_setglobal(L, "MF_CORPSE");
+    lua_pushinteger(L, MF_INFLOAT); lua_setglobal(L, "MF_INFLOAT");
+    lua_pushinteger(L, MF_COUNTKILL); lua_setglobal(L, "MF_COUNTKILL");
+    lua_pushinteger(L, MF_COUNTITEM); lua_setglobal(L, "MF_COUNTITEM");
+    lua_pushinteger(L, MF_SKULLFLY); lua_setglobal(L, "MF_SKULLFLY");
+    lua_pushinteger(L, MF_NOTDMATCH); lua_setglobal(L, "MF_NOTDMATCH");
+    lua_pushinteger(L, MF_TRANSLATION); lua_setglobal(L, "MF_TRANSLATION");
+    lua_pushinteger(L, MF_TRANSSHIFT); lua_setglobal(L, "MF_TRANSSHIFT");
+    lua_pushinteger(L, MF_TOUCHY); lua_setglobal(L, "MF_TOUCHY");
+    lua_pushinteger(L, MF_BOUNCES); lua_setglobal(L, "MF_BOUNCES");
+    lua_pushinteger(L, MF_FRIEND); lua_setglobal(L, "MF_FRIEND");
+    lua_pushinteger(L, MF_TRANSLUCENT); lua_setglobal(L, "MF_TRANSLUCENT");
+    lua_pushinteger(L, MF2_LOGRAV); lua_setglobal(L, "MF2_LOGRAV");
+    lua_pushinteger(L, MF2_SHORTMRANGE); lua_setglobal(L, "MF2_SHORTMRANGE");
+    lua_pushinteger(L, MF2_DMGIGNORED); lua_setglobal(L, "MF2_DMGIGNORED");
+    lua_pushinteger(L, MF2_NORADIUSDMG); lua_setglobal(L, "MF2_NORADIUSDMG");
+    lua_pushinteger(L, MF2_FORCERADIUSDMG); lua_setglobal(L, "MF2_FORCERADIUSDMG");
+    lua_pushinteger(L, MF2_HIGHERMPROB); lua_setglobal(L, "MF2_HIGHERMPROB");
+    lua_pushinteger(L, MF2_RANGEHALF); lua_setglobal(L, "MF2_RANGEHALF");
+    lua_pushinteger(L, MF2_NOTHRESHOLD); lua_setglobal(L, "MF2_NOTHRESHOLD");
+    lua_pushinteger(L, MF2_LONGMELEE); lua_setglobal(L, "MF2_LONGMELEE");
+    lua_pushinteger(L, MF2_BOSS); lua_setglobal(L, "MF2_BOSS");
+    lua_pushinteger(L, MF2_MAP07BOSS1); lua_setglobal(L, "MF2_MAP07BOSS1");
+    lua_pushinteger(L, MF2_MAP07BOSS2); lua_setglobal(L, "MF2_MAP07BOSS2");
+    lua_pushinteger(L, MF2_E1M8BOSS); lua_setglobal(L, "MF2_E1M8BOSS");
+    lua_pushinteger(L, MF2_E2M8BOSS); lua_setglobal(L, "MF2_E2M8BOSS");
+    lua_pushinteger(L, MF2_E3M8BOSS); lua_setglobal(L, "MF2_E3M8BOSS");
+    lua_pushinteger(L, MF2_E4M6BOSS); lua_setglobal(L, "MF2_E4M6BOSS");
+    lua_pushinteger(L, MF2_E4M8BOSS); lua_setglobal(L, "MF2_E4M8BOSS");
+    lua_pushinteger(L, MF2_RIP); lua_setglobal(L, "MF2_RIP");
+    lua_pushinteger(L, MF2_FULLVOLSOUNDS); lua_setglobal(L, "MF2_FULLVOLSOUNDS");
 }
 
 void CloseLua() {

@@ -20,6 +20,8 @@ Represents a thing/actor that exists in the game world.
 | x | fixed_t | Y (using `setPos`) | X position in global coordinates. |
 | y | fixed_t | Y (using `setPos`) | Y position in global coordinates. |
 | z | fixed_t | Y (using `setPos`) | Z position in global coordinates. |
+| flags | int | Y | Actor flags as a bitmask. Read about `mobjflag_t` [here](luahack.md) for more info. |
+| flags2 | int | Y | MBF21 actor flags as a bitmask. Read about `mobjflag2_t` [here](luahack.md) for more info. |
 
 ## Methods
 

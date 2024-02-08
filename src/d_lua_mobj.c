@@ -264,6 +264,12 @@ static int l_mobjIndex(lua_State* L) {
     else if (strcmp(key, "z") == 0) {
         lua_pushinteger(L, (*mobj_lua)->z);
     }
+    else if (strcmp(key, "flags") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->flags);
+    }
+    else if (strcmp(key, "flags2") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->flags2);
+    }
     else {
         int v_type = luaL_getmetafield(L, 1, key);
         if (v_type == LUA_TNIL) {
@@ -317,6 +323,14 @@ static int l_mobjNewIndex(lua_State* L) {
     else if (strcmp(key, "angle") == 0) {
         angle_t value = luaL_checkinteger(L, 3);
         (*mobj_lua)->angle = value;
+    }
+    else if (strcmp(key, "flags") == 0) {
+        int value = luaL_checkinteger(L, 3);
+        (*mobj_lua)->flags = value;
+    }
+    else if (strcmp(key, "flags2") == 0) {
+        int value = luaL_checkinteger(L, 3);
+        (*mobj_lua)->flags2 = value;
     }
     else {
         luaL_argerror(L, 2, "invalid mobj attribute");
