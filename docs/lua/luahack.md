@@ -16,6 +16,10 @@ Using LUAHACK, it's possible to define new codepointers as Lua functions, for us
 
  - `function f`: Lua function to be called as codepointer. For actor functions, takes 1 argument of type `Mobj`. For weapons functions, takes a `Player` followed by a `Pspr`.
 
+`nil registerMobjMethod(string name, function f)`: Registers a Lua function for use as a `Mobj` method. This is so that you can call the function with the syntax `mobjVariable:name()` instead of `name(mobjVariable)`.
+
+`nil registerPlayerMethod(string name, function f)`: Same as `registerMobjMethod`, but for `Player`.
+
 `fixed_t tofixed(number n)`: Converts the given number into 16.16 bit fixed-point format. Some functions expect numeric arguments to be in this format. The returned result is a normal 32-bit integer, but with a different "scale" (65536 represents 1.0).
 
 `number fromfixed(fixed_t n)`: Does the opposite of `tofixed`.

@@ -12,8 +12,6 @@ extern char *ptr_lstrip(char *p);
 extern lua_cptr lua_cptrs[];
 extern size_t lua_cptrs_count;
 
-#define PLAYER_META "LuaDoom.Player"
-
 player_t** NewPlayer(lua_State* L, player_t* player) {
     player_t** player_lua = (player_t**) lua_newuserdata(L, sizeof(player_t*));
     luaL_getmetatable(L, PLAYER_META);

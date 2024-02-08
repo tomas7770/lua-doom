@@ -54,6 +54,37 @@ static int l_registerCodepointer(lua_State* L) {
     return 0;
 }
 
+static void RegisterMetatableMethod(lua_State* L, const char* tname) {
+    if (lua_gettop(L) != 2) {
+        luaL_error(L, "expected 2 arguments");
+    }
+    luaL_checkstring(L, 1);
+    luaL_argexpected(L, lua_isfunction(L, 2), 2, "function");
+
+    if (luaL_getmetatable(L, tname) == LUA_TNIL) {
+        luaL_error(L, "Attempt to register method on unknown metatable");
+    }
+    lua_pushvalue(L, 1);
+    if (lua_rawget(L, -2) != LUA_TNIL) {
+        luaL_argerror(L, 1, "given method name is already used");
+    }
+    lua_pop(L, 1);
+
+    lua_pushvalue(L, 1);
+    lua_pushvalue(L, 2);
+    lua_rawset(L, -3);
+}
+
+static int l_registerMobjMethod(lua_State* L) {
+    RegisterMetatableMethod(L, MOBJ_META);
+    return 0;
+}
+
+static int l_registerPlayerMethod(lua_State* L) {
+    RegisterMetatableMethod(L, PLAYER_META);
+    return 0;
+}
+
 static int l_tofixed(lua_State* L) {
     double x = luaL_checknumber(L, 1);
     int result = FRACUNIT*x;
@@ -136,6 +167,12 @@ static int l_getGameSkill(lua_State* L) {
 static void LoadLuahackFuncs(lua_State* L) {
     lua_pushcfunction(L, l_registerCodepointer);
     lua_setglobal(L, "registerCodepointer");
+
+    lua_pushcfunction(L, l_registerMobjMethod);
+    lua_setglobal(L, "registerMobjMethod");
+
+    lua_pushcfunction(L, l_registerPlayerMethod);
+    lua_setglobal(L, "registerPlayerMethod");
 
     lua_pushcfunction(L, l_tofixed);
     lua_setglobal(L, "tofixed");

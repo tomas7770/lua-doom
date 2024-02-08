@@ -15,8 +15,6 @@ extern char *ptr_lstrip(char *p);
 extern lua_cptr lua_cptrs[];
 extern size_t lua_cptrs_count;
 
-#define MOBJ_META "LuaDoom.Mobj"
-
 mobj_t** NewMobj(lua_State* L, mobj_t* mobj) {
     mobj_t** mobj_lua = (mobj_t**) lua_newuserdata(L, sizeof(mobj_t*));
     luaL_getmetatable(L, MOBJ_META);
