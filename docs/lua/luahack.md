@@ -32,6 +32,8 @@ Using LUAHACK, it's possible to define new codepointers as Lua functions, for us
 `fixed_t sin(angle_t n)`
 `fixed_t cos(angle_t n)`: Trigonometric functions that use Doom's finite tables.
 
+`angle_t pointToAngle(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2)`: Returns an angle formed by the line starting at (x1, y1) and ending at (x2, y2).
+
 `int random()`: Random function that uses Doom's finite PRNG table.
 
 `Mobj spawnMobj(dmobjtype_t type, fixed_t x, fixed_t y, fixed_t z)`: Spawns a Mobj (thing) and returns it.

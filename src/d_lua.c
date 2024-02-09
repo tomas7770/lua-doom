@@ -9,6 +9,7 @@
 
 #include "m_io.h"
 #include "m_random.h"
+#include "r_main.h"
 
 #include "doomdef.h"
 #include "i_printf.h"
@@ -136,6 +137,15 @@ static int l_cos(lua_State* L) {
     return 1;
 }
 
+static int l_pointToAngle(lua_State* L) {
+    fixed_t x1 = luaL_checkinteger(L, 1);
+    fixed_t y1 = luaL_checkinteger(L, 2);
+    fixed_t x2 = luaL_checkinteger(L, 3);
+    fixed_t y2 = luaL_checkinteger(L, 4);
+    lua_pushinteger(L, R_PointToAngle2(x1, y1, x2, y2));
+    return 1;
+}
+
 static int l_random(lua_State* L) {
     lua_pushinteger(L, P_Random(pr_mbf21));
     return 1;
@@ -194,6 +204,9 @@ static void LoadLuahackFuncs(lua_State* L) {
 
     lua_pushcfunction(L, l_cos);
     lua_setglobal(L, "cos");
+
+    lua_pushcfunction(L, l_pointToAngle);
+    lua_setglobal(L, "pointToAngle");
 
     lua_pushcfunction(L, l_random);
     lua_setglobal(L, "random");
