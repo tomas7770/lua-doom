@@ -46,3 +46,15 @@ Call these like so: `mobjVariable:method(...)`.
 `fixed_t aimLineAttack(angle_t angle, fixed_t/nil distance, boolean/nil skipFriends)`: Does vertical autoaim for a specified angle, maximum distance (default max distance if `nil`), and optionally ignoring friend Mobjs. Returns the resulting vertical slope.
 
 `nil lineAttack(angle_t angle, fixed_t/nil distance, fixed_t slope, int damage)`: Does an hitscan attack with a specified angle, maximum distance, vertical slope, and damage.
+
+`boolean checkRange(fixed_t range)`: Checks if the Mobj's `target` is within a specified attack range.
+
+`boolean checkMeleeRange()`: Check if the Mobj's `target` is within melee range.
+
+`boolean getFlag(mobjflag_t flag)`: Gets the value of a non-MBF21 flag. More friendly alternative to reading the `flags` attribute directly.
+
+`boolean getFlag2(mobjflag2_t flag)`: Gets the value of a MBF21 flag. More friendly alternative to reading the `flags2` attribute directly.
+
+`nil setFlag(mobjflag_t flag, boolean value)`: Sets the value of a non-MBF21 flag. More friendly alternative to changing the `flags` attribute directly.
+
+`nil setFlag2(mobjflag2_t flag, boolean value)`: Sets the value of a MBF21 flag. More friendly alternative to changing the `flags2` attribute directly.

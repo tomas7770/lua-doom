@@ -44,6 +44,8 @@ Using LUAHACK, it's possible to define new codepointers as Lua functions, for us
 
 `skill_t getGameSkill()`: Returns the current game skill level.
 
+`int aproxDistance(int dx, int dy)`: Returns an approximate length of a vector (dx, dy), as done by Doom's original functions.
+
 ## Types
 
 Some new types are provided to Lua to manipulate the game environment.
