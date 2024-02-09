@@ -13,6 +13,7 @@ Represents a thing/actor that exists in the game world.
 | mass | int | N | Mass, affects physics. |
 | meleerange | int | N | Melee attack range. |
 | radius | int | N | Mobj radius. |
+| height | int | N | Mobj height. |
 | momx | fixed_t | Y | X component of velocity in global coordinates. |
 | momy | fixed_t | Y | Y component of velocity in global coordinates. |
 | momz | fixed_t | Y | Z component of velocity in global coordinates. |

@@ -243,6 +243,9 @@ static int l_mobjIndex(lua_State* L) {
     else if (strcmp(key, "radius") == 0) {
         lua_pushinteger(L, (*mobj_lua)->info->radius);
     }
+    else if (strcmp(key, "height") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->info->height);
+    }
     else if (strcmp(key, "momx") == 0) {
         lua_pushinteger(L, (*mobj_lua)->momx);
     }
