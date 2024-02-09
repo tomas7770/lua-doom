@@ -34,9 +34,9 @@ Using LUAHACK, it's possible to define new codepointers as Lua functions, for us
 
 `int random()`: Random function that uses Doom's finite PRNG table.
 
-`Mobj spawnMobj(int type, fixed_t x, fixed_t y, fixed_t z)`: Spawns a Mobj (thing) and returns it.
+`Mobj spawnMobj(dmobjtype_t type, fixed_t x, fixed_t y, fixed_t z)`: Spawns a Mobj (thing) and returns it.
 
-- `int type`: DeHackEd thing number of the thing to spawn.
+- `dmobjtype_t type`: DeHackEd thing number of the thing to spawn.
 
 - `fixed_t x, y, z`: Coordinates to spawn the thing at.
 
@@ -107,6 +107,8 @@ These aren't really new types, just a different interpretation of existing ones.
 - etc.
 
 `mobjflag2_t (int)`: MBF21 actor flag. You can find a list [here](/src/p_mobj.h#L202). **Global constants** exist in the same format as the list.
+
+`dmobjtype_t (int)`: DeHackEd thing number. You can find a list [here](/src/info.h#L1294). **Global constants** exist in the same format as the list.
 
 ## Don't...
 

@@ -273,6 +273,9 @@ static int l_mobjIndex(lua_State* L) {
     else if (strcmp(key, "flags2") == 0) {
         lua_pushinteger(L, (*mobj_lua)->flags2);
     }
+    else if (strcmp(key, "type") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->type+1);
+    }
     else {
         int v_type = luaL_getmetafield(L, 1, key);
         if (v_type == LUA_TNIL) {

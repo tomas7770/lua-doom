@@ -23,6 +23,7 @@ Represents a thing/actor that exists in the game world.
 | z | fixed_t | Y (using `setPos`) | Z position in global coordinates. |
 | flags | int | Y | Actor flags as a bitmask. Read about `mobjflag_t` [here](luahack.md) for more info. |
 | flags2 | int | Y | MBF21 actor flags as a bitmask. Read about `mobjflag2_t` [here](luahack.md) for more info. |
+| type | dmobjtype_t | N | DeHackEd thing number of the Mobj. |
 
 ## Methods
 
@@ -38,7 +39,7 @@ Call these like so: `mobjVariable:method(...)`.
 
 `nil radiusAttack(Mobj source, int damage, int distance)`: Create an explosion at the calling actor's location.
 
-`Mobj spawnMissile(Mobj dest, int type)`: Spawns a projectile at the calling actor's location, aimed at `dest`, and returns it. `type` is the DeHackEd thing number of the projectile to spawn.
+`Mobj spawnMissile(Mobj dest, dmobjtype_t type)`: Spawns a projectile at the calling actor's location, aimed at `dest`, and returns it. `type` is the DeHackEd thing number of the projectile to spawn.
 
 `nil setPos(fixed_t/nil x, fixed_t/nil y, fixed_t/nil z)`: Sets the Mobj's position. You can use `nil` for coordinates you don't want to change.
 
