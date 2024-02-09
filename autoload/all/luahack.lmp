@@ -1,3 +1,61 @@
-function AuxLibTest()
-	print("Auxiliary lib success")
+-- This is the LUAHACK auxiliary library.
+-- It contains Lua functions that were deemed as not needing to be built-in,
+-- native C functions, but may be useful for performing certain common behavior.
+-- Although this file can be easily modified or deleted, it is advised that you
+-- do NOT do so, as it may break Lua code that relies on it.
+
+function aproxDistance(dx, dy)
+    dx = math.abs(dx)
+    dy = math.abs(dy)
+    if dx < dy then
+        return dx+dy-(dx>>1)
+    end
+    return dx+dy-(dy>>1)
 end
+
+registerMobjMethod("checkRange", function(actor, range)
+    local pl = actor.target
+
+    -- friendly monsters don't attack other friends
+    return pl and (actor.flags & pl.flags & MF_FRIEND) == 0 and
+    (aproxDistance(pl.x-actor.x, pl.y-actor.y) < range) and
+    actor:checkSight(actor.target)
+end)
+
+registerMobjMethod("checkMeleeRange", function(actor)
+    local range = actor.meleerange
+
+    range = range + actor.target.radius - tofixed(20)
+
+    return actor:checkRange(range)
+end)
+
+registerMobjMethod("getFlag", function(actor, flag)
+    if (actor.flags & flag) ~= 0 then
+        return true
+    end
+    return false
+end)
+
+registerMobjMethod("getFlag2", function(actor, flag)
+    if (actor.flags2 & flag) ~= 0 then
+        return true
+    end
+    return false
+end)
+
+registerMobjMethod("setFlag", function(actor, flag, boolValue)
+    if boolValue then
+        actor.flags = actor.flags | flag
+    else
+        actor.flags = actor.flags & (~flag)
+    end
+end)
+
+registerMobjMethod("setFlag2", function(actor, flag, boolValue)
+    if boolValue then
+        actor.flags2 = actor.flags2 | flag
+    else
+        actor.flags2 = actor.flags2 & (~flag)
+    end
+end)
