@@ -208,6 +208,13 @@ static int l_mobj_lineAttack(lua_State* L) {
     return 0;
 }
 
+static int l_mobj_setState(lua_State* L) {
+    mobj_t** mobj_lua = CheckMobj(L);
+    statenum_t state = luaL_checkinteger(L, 2);
+    P_SetMobjState(*mobj_lua, state);
+    return 0;
+}
+
 static int l_mobjIndex(lua_State* L) {
     mobj_t** mobj_lua = CheckMobj(L);
 
@@ -472,6 +479,7 @@ static const struct luaL_Reg mobj_lib[] = {
     {"setPos", l_mobj_setPos},
     {"aimLineAttack", l_mobj_aimLineAttack},
     {"lineAttack", l_mobj_lineAttack},
+    {"setState", l_mobj_setState},
     {NULL, NULL}
 };
 
