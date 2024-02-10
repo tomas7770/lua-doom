@@ -276,6 +276,93 @@ static int l_mobjIndex(lua_State* L) {
     else if (strcmp(key, "type") == 0) {
         lua_pushinteger(L, (*mobj_lua)->type+1);
     }
+    else if (strcmp(key, "movedir") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->movedir);
+    }
+    else if (strcmp(key, "movecount") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->movecount);
+    }
+    else if (strcmp(key, "strafecount") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->strafecount);
+    }
+    else if (strcmp(key, "reactiontime") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->reactiontime);
+    }
+    else if (strcmp(key, "threshold") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->threshold);
+    }
+    else if (strcmp(key, "pursuecount") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->pursuecount);
+    }
+    else if (strcmp(key, "spawnstate") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->info->spawnstate);
+    }
+    else if (strcmp(key, "seestate") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->info->seestate);
+    }
+    else if (strcmp(key, "seesound") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->info->seesound);
+    }
+    else if (strcmp(key, "spawnreactiontime") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->info->reactiontime);
+    }
+    else if (strcmp(key, "attacksound") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->info->attacksound);
+    }
+    else if (strcmp(key, "painstate") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->info->painstate);
+    }
+    else if (strcmp(key, "painchance") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->info->painchance);
+    }
+    else if (strcmp(key, "painsound") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->info->painsound);
+    }
+    else if (strcmp(key, "meleestate") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->info->meleestate);
+    }
+    else if (strcmp(key, "missilestate") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->info->missilestate);
+    }
+    else if (strcmp(key, "deathstate") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->info->deathstate);
+    }
+    else if (strcmp(key, "xdeathstate") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->info->xdeathstate);
+    }
+    else if (strcmp(key, "deathsound") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->info->deathsound);
+    }
+    else if (strcmp(key, "speed") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->info->speed);
+    }
+    else if (strcmp(key, "damage") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->info->damage);
+    }
+    else if (strcmp(key, "activesound") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->info->activesound);
+    }
+    else if (strcmp(key, "raisestate") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->info->raisestate);
+    }
+    else if (strcmp(key, "infighting_group") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->info->infighting_group);
+    }
+    else if (strcmp(key, "projectile_group") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->info->projectile_group);
+    }
+    else if (strcmp(key, "splash_group") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->info->splash_group);
+    }
+    else if (strcmp(key, "ripsound") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->info->ripsound);
+    }
+    else if (strcmp(key, "altspeed") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->info->altspeed);
+    }
+    else if (strcmp(key, "droppeditem") == 0) {
+        lua_pushinteger(L, (*mobj_lua)->info->droppeditem+1);
+    }
     else {
         int v_type = luaL_getmetafield(L, 1, key);
         if (v_type == LUA_TNIL) {
@@ -337,6 +424,26 @@ static int l_mobjNewIndex(lua_State* L) {
     else if (strcmp(key, "flags2") == 0) {
         int value = luaL_checkinteger(L, 3);
         (*mobj_lua)->flags2 = value;
+    }
+    else if (strcmp(key, "movecount") == 0) {
+        short value = luaL_checkinteger(L, 3);
+        (*mobj_lua)->movecount = value;
+    }
+    else if (strcmp(key, "strafecount") == 0) {
+        short value = luaL_checkinteger(L, 3);
+        (*mobj_lua)->strafecount = value;
+    }
+    else if (strcmp(key, "reactiontime") == 0) {
+        short value = luaL_checkinteger(L, 3);
+        (*mobj_lua)->reactiontime = value;
+    }
+    else if (strcmp(key, "threshold") == 0) {
+        short value = luaL_checkinteger(L, 3);
+        (*mobj_lua)->threshold = value;
+    }
+    else if (strcmp(key, "pursuecount") == 0) {
+        short value = luaL_checkinteger(L, 3);
+        (*mobj_lua)->pursuecount = value;
     }
     else {
         luaL_argerror(L, 2, "invalid mobj attribute");

@@ -24,6 +24,36 @@ Represents a thing/actor that exists in the game world.
 | flags | int | Y | Actor flags as a bitmask. Read about `mobjflag_t` [here](luahack.md) for more info. |
 | flags2 | int | Y | MBF21 actor flags as a bitmask. Read about `mobjflag2_t` [here](luahack.md) for more info. |
 | type | dmobjtype_t | N | DeHackEd thing number of the Mobj. |
+| movedir | int | Y |  |
+| movecount | int | Y |  |
+| strafecount | int | Y |  |
+| reactiontime | int | Y |  |
+| threshold | int | Y |  |
+| pursuecount | int | Y |  |
+| spawnstate | int | N |  |
+| seestate | int | N |  |
+| seesound | int | N |  |
+| spawnreactiontime | int | N |  |
+| attacksound | int | N |  |
+| painstate | int | N |  |
+| painchance | int | N |  |
+| painsound | int | N |  |
+| meleestate | int | N |  |
+| missilestate | int | N |  |
+| deathstate | int | N |  |
+| xdeathstate | int | N |  |
+| deathsound | int | N |  |
+| speed | int | N |  |
+| damage | int | N |  |
+| activesound | int | N |  |
+| raisestate | int | N |  |
+| infighting_group | int | N |  |
+| projectile_group | int | N |  |
+| splash_group | int | N |  |
+| projectile_group | int | N |  |
+| ripsound | int | N |  |
+| altspeed | int | N |  |
+| droppeditem | dmobjtype_t | N |  |
 
 ## Methods
 
