@@ -10,6 +10,7 @@
 #include "m_io.h"
 #include "m_random.h"
 #include "r_main.h"
+#include "p_tick.h"
 
 #include "doomdef.h"
 #include "i_printf.h"
@@ -174,6 +175,29 @@ static int l_getGameSkill(lua_State* L) {
     return 1;
 }
 
+static int getMobjsIter(lua_State* L) {
+    thinker_t* thinker;
+    if (!lua_islightuserdata(L, lua_upvalueindex(1))) {
+        // Can this even happen???
+        luaL_error(L, "getMobjs lost track of the mobjs");
+    }
+    thinker = (thinker_t*) lua_touserdata(L, lua_upvalueindex(1));
+    if (thinker == &thinkercap) {
+        // End of list
+        return 0;
+    }
+    NewMobj(L, (mobj_t*) thinker);
+    lua_pushlightuserdata(L, thinker->next);
+    lua_replace(L, lua_upvalueindex(1));
+    return 1;
+}
+
+static int l_getMobjs(lua_State* L) {
+    lua_pushlightuserdata(L, thinkercap.next);
+    lua_pushcclosure(L, getMobjsIter, 1);
+    return 1;
+}
+
 static void LoadLuahackFuncs(lua_State* L) {
     lua_pushcfunction(L, l_registerCodepointer);
     lua_setglobal(L, "registerCodepointer");
@@ -216,6 +240,9 @@ static void LoadLuahackFuncs(lua_State* L) {
 
     lua_pushcfunction(L, l_getGameSkill);
     lua_setglobal(L, "getGameSkill");
+
+    lua_pushcfunction(L, l_getMobjs);
+    lua_setglobal(L, "getMobjs");
 }
 
 static void LoadLuahackConsts(lua_State* L) {

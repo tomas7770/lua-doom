@@ -46,6 +46,14 @@ Using LUAHACK, it's possible to define new codepointers as Lua functions, for us
 
 `int aproxDistance(int dx, int dy)`: Returns an approximate length of a vector (dx, dy), as done by Doom's original functions.
 
+`iterator getMobjs()`: Returns an iterator for getting all Mobjs currently present in the game world. The most common use of this is with a `for` loop:
+
+```lua
+for mobj in getMobjs() do
+    -- Do something
+end
+```
+
 ## Types
 
 Some new types are provided to Lua to manipulate the game environment.
