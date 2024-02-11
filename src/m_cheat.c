@@ -92,6 +92,7 @@ static void cheat_reveal_item();
 static void cheat_autoaim();      // killough 7/19/98
 static void cheat_tst();
 static void cheat_showfps(); // [FG] FPS counter widget
+static void cheat_linetarget();
 
 //-----------------------------------------------------------------------------
 //
@@ -308,6 +309,9 @@ struct cheat_s cheat[] = {
 // [FG] FPS counter widget
   {"showfps",    NULL,                always,
    {cheat_showfps} },
+
+  {"linetarget", NULL,                not_net | not_demo,
+    {cheat_linetarget}     }, // Give info on the current linetarget [Nugget]
 
   {NULL}                 // end-of-list marker
 };
@@ -1161,6 +1165,12 @@ static void cheat_rate()
   plyr->cheats ^= CF_RENDERSTATS;
   if ((plyr->cheats & CF_RENDERSTATS) == 0)
     plyr->message = "";
+}
+
+static void cheat_linetarget()
+{
+  plyr->cheats ^= CF_LINETARGET;
+  displaymsg("Linetarget Query %s", (plyr->cheats & CF_LINETARGET) ? "ON" : "OFF");
 }
 
 //-----------------------------------------------------------------------------

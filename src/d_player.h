@@ -72,6 +72,7 @@ typedef enum
   CF_MAPCOORDS        = 32,
   CF_RENDERSTATS      = 64,
   CF_SHOWFPS          = 128,
+  CF_LINETARGET       = 0x00080000, // Give info on the current linetarget [Nugget]
 } cheat_t;
 
 

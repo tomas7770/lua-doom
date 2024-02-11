@@ -536,6 +536,23 @@ void P_PlayerThink (player_t* player)
     cheat_mypos_print();
   }
 
+  // [Nugget] Linetarget Query cheat
+  if (player->cheats & CF_LINETARGET)
+  {
+    boolean intercepts_overflow_enabled = overflow[emu_intercepts].enabled;
+
+    overflow[emu_intercepts].enabled = false;
+    P_AimLineAttack(player->mo, player->mo->angle, 16*64*FRACUNIT, 0);
+    overflow[emu_intercepts].enabled = intercepts_overflow_enabled;
+
+    if (linetarget)
+    {
+      // Give some info on the thing
+      displaymsg("Type: %i - Health: %i/%i", linetarget->type,
+                 linetarget->health, linetarget->info->spawnhealth);
+    }
+  }
+
   if (player->damagecount)
     player->damagecount--;
 
