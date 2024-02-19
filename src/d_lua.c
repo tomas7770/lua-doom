@@ -87,6 +87,12 @@ static int l_registerPlayerMethod(lua_State* L) {
     return 0;
 }
 
+static int l_isMobj(lua_State* L) {
+    void *ud = luaL_testudata(L, 1, MOBJ_META);
+    lua_pushboolean(L, ud != NULL);
+    return 1;
+}
+
 static int l_tofixed(lua_State* L) {
     double x = luaL_checknumber(L, 1);
     int result = FRACUNIT*x;
@@ -207,6 +213,9 @@ static void LoadLuahackFuncs(lua_State* L) {
 
     lua_pushcfunction(L, l_registerPlayerMethod);
     lua_setglobal(L, "registerPlayerMethod");
+
+    lua_pushcfunction(L, l_isMobj);
+    lua_setglobal(L, "isMobj");
 
     lua_pushcfunction(L, l_tofixed);
     lua_setglobal(L, "tofixed");

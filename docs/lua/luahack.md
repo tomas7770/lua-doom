@@ -20,6 +20,8 @@ Using LUAHACK, it's possible to define new codepointers as Lua functions, for us
 
 `nil registerPlayerMethod(string name, function f)`: Same as `registerMobjMethod`, but for `Player`.
 
+`boolean isMobj(any value)`: Checks if a given value is a `Mobj`.
+
 `fixed_t tofixed(number n)`: Converts the given number into 16.16 bit fixed-point format. Some functions expect numeric arguments to be in this format. The returned result is a normal 32-bit integer, but with a different "scale" (65536 represents 1.0).
 
 `number fromfixed(fixed_t n)`: Does the opposite of `tofixed`.
