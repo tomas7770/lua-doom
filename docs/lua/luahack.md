@@ -22,27 +22,21 @@ Using LUAHACK, it's possible to define new codepointers as Lua functions, for us
 
 `boolean isMobj(any value)`: Checks if a given value is a `Mobj`.
 
-`fixed_t tofixed(number n)`: Converts the given number into 16.16 bit fixed-point format. Some functions expect numeric arguments to be in this format. The returned result is a normal 32-bit integer, but with a different "scale" (65536 represents 1.0).
+`int tofixed(number n)`: Converts the given number into 16.16 bit fixed-point format, i.e. a normal 32-bit integer, but with a different "scale" (65536 represents 1.0). Some MBF21 codepointers expect arguments in this format.
 
-`number fromfixed(fixed_t n)`: Does the opposite of `tofixed`.
+`number tan(number n)`
+`number sin(number n)`
+`number cos(number n)`: Trigonometric functions that use Doom's finite tables. Angle in degrees.
 
-`angle_t fixedToAngle(fixed_t n)`: Converts a fixed-point number to an angle format expected by some functions (binary angular measurement).
-
-`fixed_t angleToFixed(angle_t n)`: Does the opposite of `fixedToAngle`.
-
-`fixed_t tan(angle_t n)`
-`fixed_t sin(angle_t n)`
-`fixed_t cos(angle_t n)`: Trigonometric functions that use Doom's finite tables.
-
-`angle_t pointToAngle(fixed_t x1, fixed_t y1, fixed_t x2, fixed_t y2)`: Returns an angle formed by the line starting at (x1, y1) and ending at (x2, y2).
+`number pointToAngle(number x1, number y1, number x2, number y2)`: Returns an angle formed by the line starting at (x1, y1) and ending at (x2, y2).
 
 `int random()`: Random function that uses Doom's finite PRNG table.
 
-`Mobj spawnMobj(dmobjtype_t type, fixed_t x, fixed_t y, fixed_t z)`: Spawns a Mobj (thing) and returns it.
+`Mobj spawnMobj(dmobjtype_t type, number x, number y, number z)`: Spawns a Mobj (thing) and returns it.
 
 - `dmobjtype_t type`: DeHackEd thing number of the thing to spawn.
 
-- `fixed_t x, y, z`: Coordinates to spawn the thing at.
+- `number x, y, z`: Coordinates to spawn the thing at.
 
 `skill_t getGameSkill()`: Returns the current game skill level.
 
@@ -69,10 +63,6 @@ Pspr
 ## Pseudo-types
 
 These aren't really new types, just a different interpretation of existing ones. As a result, for functions that take those as arguments, their corresponding real type is valid as well. They may be replaced by real types at some point, though.
-
-`fixed_t (int)`: 16.16 bit fixed-point number.
-
-`angle_t (int)`: Angle in binary angular measurement format.
 
 `skill_t (int)`: Game skill level. The following **global constants** exist for this:
 
@@ -128,10 +118,8 @@ These aren't really new types, just a different interpretation of existing ones.
 
 - Use global variables for game logic. These persist after starting a new game or loading a save file. Best case scenario, you break demo/multiplayer support. Worst case scenario, the game bugs out unpredictably or crashes.
 
-- Multiply or divide fixed-point numbers or angles. It'll break their "scale". Convert them to normal numbers first.
-
 - Use `math.random`. It's incompatible with demos/multiplayer. Use the global `random()` function instead.
 
-- Use `math.sin`, `math.cos`, `math.tan`, or other trigonometric functions from the Lua `math` library. Compatibility with demos/multiplayer isn't guaranteed, and you'd need to convert an `angle_t` to radians anyway. Use the global `sin`, `cos`, and `tan` functions instead.
+- Use `math.sin`, `math.cos`, `math.tan`, or other trigonometric functions from the Lua `math` library. Compatibility with demos/multiplayer isn't guaranteed, and you'd need to convert the angle to radians anyway. Use the global `sin`, `cos`, and `tan` functions instead.
 
 - Modify pre-existing global functions or constants.

@@ -8,9 +8,9 @@ function aproxDistance(dx, dy)
     dx = math.abs(dx)
     dy = math.abs(dy)
     if dx < dy then
-        return dx+dy-(dx>>1)
+        return dx+dy-(dx/2)
     end
-    return dx+dy-(dy>>1)
+    return dx+dy-(dy/2)
 end
 
 registerMobjMethod("checkRange", function(actor, range)
@@ -25,7 +25,7 @@ end)
 registerMobjMethod("checkMeleeRange", function(actor)
     local range = actor.meleerange
 
-    range = range + actor.target.radius - tofixed(20)
+    range = range + actor.target.radius - 20
 
     return actor:checkRange(range)
 end)

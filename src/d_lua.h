@@ -14,5 +14,7 @@ typedef struct {
 void ProcessLuaLump(int lumpnum);
 void CallLuaCptrP1(int cptr, mobj_t* mobj, long args[]);
 void CallLuaCptrP2(int cptr, player_t* player, pspdef_t* psp, long args[]);
+fixed_t ToFixed(double x);
+double FromFixed(fixed_t x);
 
 #endif

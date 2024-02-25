@@ -11,16 +11,16 @@ Represents a thing/actor that exists in the game world.
 | target | Mobj or nil | Y | For monsters, the Mobj they want to attack. For projectiles, the Mobj who shot them. |
 | tracer | Mobj or nil | Y | Used by some projectiles, e.g. Revenant missile, to track a Mobj. |
 | mass | int | N | Mass, affects physics. |
-| meleerange | int | N | Melee attack range. |
-| radius | int | N | Mobj radius. |
-| height | int | N | Mobj height. |
-| momx | fixed_t | Y | X component of velocity in global coordinates. |
-| momy | fixed_t | Y | Y component of velocity in global coordinates. |
-| momz | fixed_t | Y | Z component of velocity in global coordinates. |
-| angle | angle_t | Y | Orientation |
-| x | fixed_t | Y (using `setPos`) | X position in global coordinates. |
-| y | fixed_t | Y (using `setPos`) | Y position in global coordinates. |
-| z | fixed_t | Y (using `setPos`) | Z position in global coordinates. |
+| meleerange | number | N | Melee attack range. |
+| radius | number | N | Mobj radius. |
+| height | number | N | Mobj height. |
+| momx | number | Y | X component of velocity in global coordinates. |
+| momy | number | Y | Y component of velocity in global coordinates. |
+| momz | number | Y | Z component of velocity in global coordinates. |
+| angle | number | Y | Orientation |
+| x | number | Y (using `setPos`) | X position in global coordinates. |
+| y | number | Y (using `setPos`) | Y position in global coordinates. |
+| z | number | Y (using `setPos`) | Z position in global coordinates. |
 | flags | int | Y | Actor flags as a bitmask. Read about `mobjflag_t` [here](luahack.md) for more info. |
 | flags2 | int | Y | MBF21 actor flags as a bitmask. Read about `mobjflag2_t` [here](luahack.md) for more info. |
 | type | dmobjtype_t | N | DeHackEd thing number of the Mobj. |
@@ -71,13 +71,13 @@ Call these like so: `mobjVariable:method(...)`.
 
 `Mobj spawnMissile(Mobj dest, dmobjtype_t type)`: Spawns a projectile at the calling actor's location, aimed at `dest`, and returns it. `type` is the DeHackEd thing number of the projectile to spawn.
 
-`nil setPos(fixed_t/nil x, fixed_t/nil y, fixed_t/nil z)`: Sets the Mobj's position. You can use `nil` for coordinates you don't want to change.
+`nil setPos(number/nil x, number/nil y, number/nil z)`: Sets the Mobj's position. You can use `nil` for coordinates you don't want to change.
 
-`fixed_t aimLineAttack(angle_t angle, fixed_t/nil distance, boolean/nil skipFriends)`: Does vertical autoaim for a specified angle, maximum distance (default max distance if `nil`), and optionally ignoring friend Mobjs. Returns the resulting vertical slope.
+`number aimLineAttack(number angle, number/nil distance, boolean/nil skipFriends)`: Does vertical autoaim for a specified angle, maximum distance (default max distance if `nil`), and optionally ignoring friend Mobjs. Returns the resulting vertical slope.
 
-`nil lineAttack(angle_t angle, fixed_t/nil distance, fixed_t slope, int damage)`: Does an hitscan attack with a specified angle, maximum distance, vertical slope, and damage.
+`nil lineAttack(number angle, number/nil distance, number slope, int damage)`: Does an hitscan attack with a specified angle, maximum distance, vertical slope, and damage.
 
-`boolean checkRange(fixed_t range)`: Checks if the Mobj's `target` is within a specified attack range.
+`boolean checkRange(number range)`: Checks if the Mobj's `target` is within a specified attack range.
 
 `boolean checkMeleeRange()`: Check if the Mobj's `target` is within melee range.
 

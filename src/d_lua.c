@@ -100,56 +100,38 @@ static int l_tofixed(lua_State* L) {
     return 1;
 }
 
-static int l_fromfixed(lua_State* L) {
-    int x = luaL_checkinteger(L, 1);
-    lua_pushnumber(L, x);
-    lua_pushnumber(L, FRACUNIT);
-    lua_arith(L, LUA_OPDIV);
-    return 1;
-}
-
-static int l_fixedToAngle(lua_State* L) {
-    fixed_t x = luaL_checkinteger(L, 1);
-    int result = FixedToAngle(x);
-    lua_pushinteger(L, result);
-    return 1;
-}
-
-static int l_angleToFixed(lua_State* L) {
-    angle_t x = luaL_checkinteger(L, 1);
-    int result = AngleToFixed(x);
-    lua_pushinteger(L, result);
-    return 1;
-}
-
 static int l_tan(lua_State* L) {
-    angle_t an = luaL_checkinteger(L, 1);
+    double in_angle = luaL_checknumber(L, 1);
+    angle_t an = FixedToAngle(ToFixed(in_angle));
     an += ANG90;
     an >>= ANGLETOFINESHIFT;
-    lua_pushinteger(L, finetangent[an % (FINEANGLES/2)]);
+    lua_pushnumber(L, FromFixed(finetangent[an % (FINEANGLES/2)]));
     return 1;
 }
 
 static int l_sin(lua_State* L) {
-    angle_t an = luaL_checkinteger(L, 1);
+    double in_angle = luaL_checknumber(L, 1);
+    angle_t an = FixedToAngle(ToFixed(in_angle));
     an >>= ANGLETOFINESHIFT;
-    lua_pushinteger(L, finesine[an % FINEANGLES]);
+    lua_pushnumber(L, FromFixed(finesine[an % FINEANGLES]));
     return 1;
 }
 
 static int l_cos(lua_State* L) {
-    angle_t an = luaL_checkinteger(L, 1);
+    double in_angle = luaL_checknumber(L, 1);
+    angle_t an = FixedToAngle(ToFixed(in_angle));
     an >>= ANGLETOFINESHIFT;
-    lua_pushinteger(L, finecosine[an % FINEANGLES]);
+    lua_pushnumber(L, FromFixed(finecosine[an % FINEANGLES]));
     return 1;
 }
 
 static int l_pointToAngle(lua_State* L) {
-    fixed_t x1 = luaL_checkinteger(L, 1);
-    fixed_t y1 = luaL_checkinteger(L, 2);
-    fixed_t x2 = luaL_checkinteger(L, 3);
-    fixed_t y2 = luaL_checkinteger(L, 4);
-    lua_pushinteger(L, R_PointToAngle2(x1, y1, x2, y2));
+    fixed_t x1 = ToFixed(luaL_checknumber(L, 1));
+    fixed_t y1 = ToFixed(luaL_checknumber(L, 2));
+    fixed_t x2 = ToFixed(luaL_checknumber(L, 3));
+    fixed_t y2 = ToFixed(luaL_checknumber(L, 4));
+    angle_t an = R_PointToAngle2(x1, y1, x2, y2);
+    lua_pushnumber(L, FromFixed(AngleToFixed(an)));
     return 1;
 }
 
@@ -161,9 +143,9 @@ static int l_random(lua_State* L) {
 static int l_spawnMobj(lua_State* L) {
     mobj_t* mo;
     int type = luaL_checkinteger(L, 1);
-    fixed_t x = luaL_checkinteger(L, 2);
-    fixed_t y = luaL_checkinteger(L, 3);
-    fixed_t z = luaL_checkinteger(L, 4);
+    fixed_t x = ToFixed(luaL_checknumber(L, 2));
+    fixed_t y = ToFixed(luaL_checknumber(L, 3));
+    fixed_t z = ToFixed(luaL_checknumber(L, 4));
     type -= 1;
 
     mo = P_SpawnMobj(x, y, z, type);
@@ -219,15 +201,6 @@ static void LoadLuahackFuncs(lua_State* L) {
 
     lua_pushcfunction(L, l_tofixed);
     lua_setglobal(L, "tofixed");
-
-    lua_pushcfunction(L, l_fromfixed);
-    lua_setglobal(L, "fromfixed");
-
-    lua_pushcfunction(L, l_fixedToAngle);
-    lua_setglobal(L, "fixedToAngle");
-
-    lua_pushcfunction(L, l_angleToFixed);
-    lua_setglobal(L, "angleToFixed");
 
     lua_pushcfunction(L, l_tan);
     lua_setglobal(L, "tan");
@@ -552,4 +525,12 @@ void CallLuaCptrP2(int cptr, player_t* player, pspdef_t* psp, long args[]) {
     if (lua_pcall(L_state, 2 + MAXSTATEARGS, 0, 0) != 0) {
         I_Error("%s", lua_tostring(L_state, -1));
     }
+}
+
+fixed_t ToFixed(double x) {
+    return (fixed_t) round(x*FRACUNIT);
+}
+
+double FromFixed(fixed_t x) {
+    return ((double) x)/((double) FRACUNIT);
 }

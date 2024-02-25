@@ -179,9 +179,15 @@ static int l_mobj_spawnMissile(lua_State* L) {
 static int l_mobj_setPos(lua_State* L) {
     mobj_t** mobj_lua = CheckMobj(L);
     P_UnsetThingPosition(*mobj_lua);
-    (*mobj_lua)->x = luaL_optinteger(L, 2, (*mobj_lua)->x);
-    (*mobj_lua)->y = luaL_optinteger(L, 3, (*mobj_lua)->y);
-    (*mobj_lua)->z = luaL_optinteger(L, 4, (*mobj_lua)->z);
+    if (!lua_isnoneornil(L, 2)) {
+        (*mobj_lua)->x = ToFixed(luaL_checknumber(L, 2));
+    }
+    if (!lua_isnoneornil(L, 3)) {
+        (*mobj_lua)->y = ToFixed(luaL_checknumber(L, 3));
+    }
+    if (!lua_isnoneornil(L, 4)) {
+        (*mobj_lua)->z = ToFixed(luaL_checknumber(L, 4));
+    }
     P_SetThingPosition(*mobj_lua);
     return 0;
 }
@@ -190,20 +196,26 @@ static int l_mobj_aimLineAttack(lua_State* L) {
     fixed_t slope;
     boolean skip_friends;
     mobj_t** mobj_lua = CheckMobj(L);
-    angle_t angle = luaL_checkinteger(L, 2);
-    fixed_t distance = luaL_optinteger(L, 3, MISSILERANGE);
+    angle_t angle = FixedToAngle(ToFixed(luaL_checknumber(L, 2)));
+    fixed_t distance = MISSILERANGE;
+    if (!lua_isnoneornil(L, 3)) {
+        distance = ToFixed(luaL_checknumber(L, 3));
+    }
     skip_friends = lua_isboolean(L, 4) ? lua_toboolean(L, 4) : false;
     slope = P_AimLineAttack(*mobj_lua, angle, distance, skip_friends ? MF_FRIEND : 0);
-    lua_pushinteger(L, slope);
+    lua_pushnumber(L, FromFixed(slope));
     return 1;
 }
 
 static int l_mobj_lineAttack(lua_State* L) {
     mobj_t** mobj_lua = CheckMobj(L);
-    angle_t angle = luaL_checkinteger(L, 2);
-    fixed_t distance = luaL_optinteger(L, 3, MISSILERANGE);
-    fixed_t slope = luaL_checkinteger(L, 4);
+    angle_t angle = FixedToAngle(ToFixed(luaL_checknumber(L, 2)));
+    fixed_t distance = MISSILERANGE;
+    fixed_t slope = ToFixed(luaL_checknumber(L, 4));
     int damage = luaL_checkinteger(L, 5);
+    if (!lua_isnoneornil(L, 3)) {
+        distance = ToFixed(luaL_checknumber(L, 3));
+    }
     P_LineAttack(*mobj_lua, angle, distance, slope, damage);
     return 0;
 }
@@ -245,34 +257,34 @@ static int l_mobjIndex(lua_State* L) {
         lua_pushinteger(L, (*mobj_lua)->info->mass);
     }
     else if (strcmp(key, "meleerange") == 0) {
-        lua_pushinteger(L, (*mobj_lua)->info->meleerange);
+        lua_pushnumber(L, FromFixed((*mobj_lua)->info->meleerange));
     }
     else if (strcmp(key, "radius") == 0) {
-        lua_pushinteger(L, (*mobj_lua)->info->radius);
+        lua_pushnumber(L, FromFixed((*mobj_lua)->info->radius));
     }
     else if (strcmp(key, "height") == 0) {
-        lua_pushinteger(L, (*mobj_lua)->info->height);
+        lua_pushnumber(L, FromFixed((*mobj_lua)->info->height));
     }
     else if (strcmp(key, "momx") == 0) {
-        lua_pushinteger(L, (*mobj_lua)->momx);
+        lua_pushnumber(L, FromFixed((*mobj_lua)->momx));
     }
     else if (strcmp(key, "momy") == 0) {
-        lua_pushinteger(L, (*mobj_lua)->momy);
+        lua_pushnumber(L, FromFixed((*mobj_lua)->momy));
     }
     else if (strcmp(key, "momz") == 0) {
-        lua_pushinteger(L, (*mobj_lua)->momz);
+        lua_pushnumber(L, FromFixed((*mobj_lua)->momz));
     }
     else if (strcmp(key, "angle") == 0) {
-        lua_pushinteger(L, (*mobj_lua)->angle);
+        lua_pushnumber(L, FromFixed(AngleToFixed((*mobj_lua)->angle)));
     }
     else if (strcmp(key, "x") == 0) {
-        lua_pushinteger(L, (*mobj_lua)->x);
+        lua_pushnumber(L, FromFixed((*mobj_lua)->x));
     }
     else if (strcmp(key, "y") == 0) {
-        lua_pushinteger(L, (*mobj_lua)->y);
+        lua_pushnumber(L, FromFixed((*mobj_lua)->y));
     }
     else if (strcmp(key, "z") == 0) {
-        lua_pushinteger(L, (*mobj_lua)->z);
+        lua_pushnumber(L, FromFixed((*mobj_lua)->z));
     }
     else if (strcmp(key, "flags") == 0) {
         lua_pushinteger(L, (*mobj_lua)->flags);
@@ -409,19 +421,19 @@ static int l_mobjNewIndex(lua_State* L) {
         }
     }
     else if (strcmp(key, "momx") == 0) {
-        int value = luaL_checkinteger(L, 3);
+        fixed_t value = ToFixed(luaL_checknumber(L, 3));
         (*mobj_lua)->momx = value;
     }
     else if (strcmp(key, "momy") == 0) {
-        int value = luaL_checkinteger(L, 3);
+        fixed_t value = ToFixed(luaL_checknumber(L, 3));
         (*mobj_lua)->momy = value;
     }
     else if (strcmp(key, "momz") == 0) {
-        int value = luaL_checkinteger(L, 3);
+        fixed_t value = ToFixed(luaL_checknumber(L, 3));
         (*mobj_lua)->momz = value;
     }
     else if (strcmp(key, "angle") == 0) {
-        angle_t value = luaL_checkinteger(L, 3);
+        angle_t value = FixedToAngle(ToFixed(luaL_checknumber(L, 3)));
         (*mobj_lua)->angle = value;
     }
     else if (strcmp(key, "flags") == 0) {
