@@ -13,11 +13,7 @@ extern lua_cptr lua_cptrs[];
 extern size_t lua_cptrs_count;
 
 player_t** NewPlayer(lua_State* L, player_t* player) {
-    player_t** player_lua = (player_t**) lua_newuserdata(L, sizeof(player_t*));
-    luaL_getmetatable(L, PLAYER_META);
-    lua_setmetatable(L, -2); // set player metatable
-    *player_lua = player;
-    return player_lua;
+    return (player_t**) NewUserdata(L, (void*) player, sizeof(player_t*), PLAYER_META);
 }
 
 static player_t** CheckPlayerInIndex(lua_State* L, int index) {
@@ -134,16 +130,8 @@ static int l_playerIndex(lua_State* L) {
     return 1;
 }
 
-static int l_playerEq(lua_State* L) {
-    player_t** player_lua = CheckPlayer(L);
-    player_t** player2_lua = CheckPlayerInIndex(L, 2);
-    lua_pushboolean(L, *player_lua == *player2_lua);
-    return 1;
-}
-
 static const struct luaL_Reg player_lib[] = {
     {"__index", l_playerIndex},
-    {"__eq", l_playerEq},
     {"call", l_player_call},
     {"getCheat", l_player_getCheat},
     {"getPower", l_player_getPower},

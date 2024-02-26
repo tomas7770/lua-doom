@@ -16,11 +16,7 @@ extern lua_cptr lua_cptrs[];
 extern size_t lua_cptrs_count;
 
 mobj_t** NewMobj(lua_State* L, mobj_t* mobj) {
-    mobj_t** mobj_lua = (mobj_t**) lua_newuserdata(L, sizeof(mobj_t*));
-    luaL_getmetatable(L, MOBJ_META);
-    lua_setmetatable(L, -2); // set mobj metatable
-    *mobj_lua = mobj;
-    return mobj_lua;
+    return (mobj_t**) NewUserdata(L, (void*) mobj, sizeof(mobj_t*), MOBJ_META);
 }
 
 static mobj_t** CheckMobjInIndex(lua_State* L, int index) {
@@ -471,17 +467,9 @@ static int l_mobjNewIndex(lua_State* L) {
     return 0;
 }
 
-static int l_mobjEq(lua_State* L) {
-    mobj_t** mobj_lua = CheckMobj(L);
-    mobj_t** mobj2_lua = CheckMobjInIndex(L, 2);
-    lua_pushboolean(L, *mobj_lua == *mobj2_lua);
-    return 1;
-}
-
 static const struct luaL_Reg mobj_lib[] = {
     {"__index", l_mobjIndex},
     {"__newindex", l_mobjNewIndex},
-    {"__eq", l_mobjEq},
     {"call", l_mobj_call},
     {"callMisc", l_mobj_callMisc},
     {"checkSight", l_mobj_checkSight},

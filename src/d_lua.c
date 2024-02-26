@@ -1,4 +1,3 @@
-#include <lua.h>
 #include <lauxlib.h>
 #include <lualib.h>
 
@@ -27,6 +26,13 @@ lua_State* L_state = NULL;
 
 lua_cptr lua_cptrs[LUA_CPTRS_MAX];
 size_t lua_cptrs_count = 0;
+
+// Reference to userdata table in registry.
+// The userdata table is a weak table that maps each game object
+// in use by Lua scripts (represented as a light userdata) to a
+// single full userdata which can be shared by multiple Lua variables.
+// When the userdata is no longer in use, it is garbage collected.
+int udata_table;
 
 static int l_registerCodepointer(lua_State* L) {
     int cptr, cptr_name_len;
@@ -447,6 +453,19 @@ static void LoadLuahackConsts(lua_State* L) {
     lua_pushinteger(L, MT_MUSICSOURCE+1); lua_setglobal(L, "MT_MUSICSOURCE");
 }
 
+static void SetupUserdataTable(lua_State* L) {
+    // Create table and set its metatable to itself
+    lua_newtable(L);
+    lua_pushvalue(L, -1);
+    lua_setmetatable(L, -2);
+    // Make it a weak table
+    lua_pushliteral(L, "__mode");
+    lua_pushliteral(L, "v");
+    lua_rawset(L, -3);
+    // Store it in the registry
+    udata_table = luaL_ref(L, LUA_REGISTRYINDEX);
+}
+
 void CloseLua() {
     lua_close(L_state);
 }
@@ -460,6 +479,7 @@ static void OpenLua() {
     luaL_openlibs(L_state);
     LoadLuahackFuncs(L_state);
     LoadLuahackConsts(L_state);
+    SetupUserdataTable(L_state);
     LoadMobjMetatable(L_state);
     LoadPlayerMetatable(L_state);
     LoadPsprMetatable(L_state);
@@ -533,4 +553,34 @@ fixed_t ToFixed(double x) {
 
 double FromFixed(fixed_t x) {
     return ((double) x)/((double) FRACUNIT);
+}
+
+void** NewUserdata(lua_State* L, void* data, size_t data_size, const char* metatable) {
+    void** data_lua;
+
+    // Check if userdata already exists in userdata table
+    lua_rawgeti(L, LUA_REGISTRYINDEX, udata_table);
+    lua_pushlightuserdata(L, data);
+    if (lua_rawget(L, -2) == LUA_TUSERDATA) {
+        // Already exists
+        data_lua = (void**) lua_touserdata(L, -1);
+        lua_remove(L, -2); // userdata table no longer needed
+        return data_lua;
+    }
+    // Pop invalid value
+    lua_pop(L, 1);
+
+    // Doesn't exist, so create it and store it
+    data_lua = (void**) lua_newuserdata(L, data_size);
+    luaL_getmetatable(L, metatable);
+    lua_setmetatable(L, -2); // set metatable
+    *data_lua = data;
+
+    lua_pushlightuserdata(L, data);
+    lua_pushvalue(L, -2);
+    lua_rawset(L, -4);
+
+    lua_remove(L, -2); // userdata table no longer needed
+
+    return data_lua;
 }

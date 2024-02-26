@@ -6,11 +6,7 @@
 #define PSPR_META "LuaDoom.Pspr"
 
 pspdef_t** NewPspr(lua_State* L, pspdef_t* psp) {
-    pspdef_t** psp_lua = (pspdef_t**) lua_newuserdata(L, sizeof(pspdef_t*));
-    luaL_getmetatable(L, PSPR_META);
-    lua_setmetatable(L, -2); // set pspr metatable
-    *psp_lua = psp;
-    return psp_lua;
+    return (pspdef_t**) NewUserdata(L, (void*) psp, sizeof(pspdef_t*), PSPR_META);
 }
 
 pspdef_t** CheckPsprInIndex(lua_State* L, int index) {
@@ -37,16 +33,8 @@ static int l_psprIndex(lua_State* L) {
     return 1;
 }
 
-static int l_psprEq(lua_State* L) {
-    pspdef_t** psp_lua = CheckPspr(L);
-    pspdef_t** psp2_lua = CheckPsprInIndex(L, 2);
-    lua_pushboolean(L, *psp_lua == *psp2_lua);
-    return 1;
-}
-
 static const struct luaL_Reg pspr_lib[] = {
     {"__index", l_psprIndex},
-    {"__eq", l_psprEq},
     {NULL, NULL}
 };
 
