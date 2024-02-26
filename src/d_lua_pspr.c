@@ -8,7 +8,7 @@
 pspdef_t** NewPspr(lua_State* L, pspdef_t* psp) {
     pspdef_t** psp_lua = (pspdef_t**) lua_newuserdata(L, sizeof(pspdef_t*));
     luaL_getmetatable(L, PSPR_META);
-    lua_setmetatable(L, -2); // set player metatable
+    lua_setmetatable(L, -2); // set pspr metatable
     *psp_lua = psp;
     return psp_lua;
 }
