@@ -13,6 +13,22 @@ function aproxDistance(dx, dy)
     return dx+dy-(dy/2)
 end
 
+function getFlag(flagsValue, flag)
+    if (flagsValue & flag) ~= 0 then
+        return true
+    end
+    return false
+end
+
+function setFlag(flagsValue, flag, boolValue)
+    if boolValue then
+        flagsValue = flagsValue | flag
+    else
+        flagsValue = flagsValue & (~flag)
+    end
+    return flagsValue
+end
+
 registerMobjMethod("checkRange", function(actor, range)
     local pl = actor.target
 
@@ -28,34 +44,4 @@ registerMobjMethod("checkMeleeRange", function(actor)
     range = range + actor.target.radius - 20
 
     return actor:checkRange(range)
-end)
-
-registerMobjMethod("getFlag", function(actor, flag)
-    if (actor.flags & flag) ~= 0 then
-        return true
-    end
-    return false
-end)
-
-registerMobjMethod("getFlag2", function(actor, flag)
-    if (actor.flags2 & flag) ~= 0 then
-        return true
-    end
-    return false
-end)
-
-registerMobjMethod("setFlag", function(actor, flag, boolValue)
-    if boolValue then
-        actor.flags = actor.flags | flag
-    else
-        actor.flags = actor.flags & (~flag)
-    end
-end)
-
-registerMobjMethod("setFlag2", function(actor, flag, boolValue)
-    if boolValue then
-        actor.flags2 = actor.flags2 | flag
-    else
-        actor.flags2 = actor.flags2 & (~flag)
-    end
 end)

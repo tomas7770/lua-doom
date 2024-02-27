@@ -50,6 +50,10 @@ for mobj in getMobjs() do
 end
 ```
 
+`boolean getFlag(int flagsValue, int flag)`: Gets the value of a flag in a flags value, e.g. Mobj's `flags`. More friendly alternative to reading the flags directly.
+
+`int setFlag(int flagsValue, int flag, boolean value)`: Sets the value of a flag in a flags value, and returns the new flags value. More friendly alternative to writing to the flags directly.
+
 ## Types
 
 Some new types are provided to Lua to manipulate the game environment.

@@ -81,12 +81,4 @@ Call these like so: `mobjVariable:method(...)`.
 
 `boolean checkMeleeRange()`: Check if the Mobj's `target` is within melee range.
 
-`boolean getFlag(mobjflag_t flag)`: Gets the value of a non-MBF21 flag. More friendly alternative to reading the `flags` attribute directly.
-
-`boolean getFlag2(mobjflag2_t flag)`: Gets the value of a MBF21 flag. More friendly alternative to reading the `flags2` attribute directly.
-
-`nil setFlag(mobjflag_t flag, boolean value)`: Sets the value of a non-MBF21 flag. More friendly alternative to changing the `flags` attribute directly.
-
-`nil setFlag2(mobjflag2_t flag, boolean value)`: Sets the value of a MBF21 flag. More friendly alternative to changing the `flags2` attribute directly.
-
 `nil setState(int state)`
