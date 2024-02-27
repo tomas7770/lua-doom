@@ -1,6 +1,7 @@
 #include <lauxlib.h>
 #include <lualib.h>
 
+#include "d_lua.h"
 #include "d_lua_pspr.h"
 
 #define PSPR_META "LuaDoom.Pspr"
