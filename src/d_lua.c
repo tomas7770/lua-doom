@@ -5,11 +5,14 @@
 #include "d_lua_mobj.h"
 #include "d_lua_player.h"
 #include "d_lua_pspr.h"
+#include "d_lua_line.h"
+#include "d_lua_sector.h"
 
 #include "m_io.h"
 #include "m_random.h"
 #include "r_main.h"
 #include "p_tick.h"
+#include "p_maputl.h"
 
 #include "doomdef.h"
 #include "i_printf.h"
@@ -192,6 +195,39 @@ static int l_getMobjs(lua_State* L) {
     return 1;
 }
 
+static boolean PTR_LuaTraverse(intercept_t *in) {
+    boolean result;
+    // Push function to top of the stack
+    lua_pushvalue(L_state, 5);
+    // Push args and call function
+    if (in->isaline) {
+        lua_pushliteral(L_state, "line");
+    }
+    else {
+        NewMobj(L_state, in->d.thing);
+    }
+    lua_pushnumber(L_state, FromFixed(in->frac));
+    if (lua_pcall(L_state, 2, 1, 0) != 0) {
+        lua_error(L_state);
+    }
+    result = lua_toboolean(L_state, -1);
+    lua_pop(L_state, 1);
+    return result;
+}
+
+static int l_pathTraverse(lua_State* L) {
+    fixed_t x1 = ToFixed(luaL_checknumber(L, 1));
+    fixed_t y1 = ToFixed(luaL_checknumber(L, 2));
+    fixed_t x2 = ToFixed(luaL_checknumber(L, 3));
+    fixed_t y2 = ToFixed(luaL_checknumber(L, 4));
+    boolean checkLines = lua_isboolean(L, 6) ? lua_toboolean(L, 6) : true;
+    boolean checkThings = lua_isboolean(L, 7) ? lua_toboolean(L, 7) : true;
+    int flags = (checkLines ? PT_ADDLINES : 0) | (checkThings ? PT_ADDTHINGS : 0);
+    luaL_argexpected(L, lua_isfunction(L, 5), 5, "function");
+    lua_pushboolean(L, P_PathTraverse(x1, y1, x2, y2, flags, PTR_LuaTraverse));
+    return 1;
+}
+
 static void LoadLuahackFuncs(lua_State* L) {
     lua_pushcfunction(L, l_registerCodepointer);
     lua_setglobal(L, "registerCodepointer");
@@ -231,6 +267,9 @@ static void LoadLuahackFuncs(lua_State* L) {
 
     lua_pushcfunction(L, l_getMobjs);
     lua_setglobal(L, "getMobjs");
+
+    lua_pushcfunction(L, l_pathTraverse);
+    lua_setglobal(L, "pathTraverse");
 }
 
 static void LoadLuahackConsts(lua_State* L) {
@@ -483,6 +522,8 @@ static void OpenLua() {
     LoadMobjMetatable(L_state);
     LoadPlayerMetatable(L_state);
     LoadPsprMetatable(L_state);
+    LoadLineMetatable(L_state);
+    LoadSectorMetatable(L_state);
 }
 
 void ProcessLuaLump(int lumpnum)
