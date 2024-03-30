@@ -1,0 +1,3 @@
+LuaDoom demo made by tomas7770 (GitHub username)
+Trampoline assets from SuperTux
+BAL8xx and DSFRE000 from FreeDoom

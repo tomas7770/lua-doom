@@ -1,0 +1,59 @@
+## ===========================================================================
+## These are the base properties used by this project.
+## This file is NOT read by DoomMake!
+##
+## The purpose of this file is to assist in creating a new 
+## "doommake.properties" file for local builds. Copy the following below this
+## header into your new properties file. Remember: DO NOT check 
+## "doommake.properties" into your repository! 
+## ===========================================================================
+
+## IWAD Path
+## Sets the path to the IWAD used by this project.
+doommake.iwad=
+
+## Build Directory
+## Sets the project build directory.
+## Leave blank for default.
+doommake.dir.build=
+
+## Distribution Directory
+## Sets the project distribution directory.
+## Leave blank for default.
+doommake.dir.dist=
+
+## Distribution Directory
+## Sets the project source directory.
+## Leave blank for default.
+doommake.dir.src=
+
+## Lock File Name
+## Sets the lock file name. Created in build directory.
+## Leave blank for default.
+doommake.file.lock=
+
+## DeHackEd Patch Output File
+## Sets the name of the DeHackEd patch compiled from DECOHack. Created in build directory.
+## Leave blank for default.
+doommake.file.patch=
+
+## DeHackEd Patch Source Output File
+## Sets the name of the combined DeHackEd patch source compiled from DECOHack. Created in build directory.
+## Leave blank for default.
+doommake.file.patch.src=
+
+## Asset WAD
+## Sets the name of the asset WAD. Created in build directory.
+## Leave blank for default.
+doommake.file.assets=
+
+## Map WAD
+## Sets the name of the output maps WAD. Created in build directory.
+## Leave blank for default.
+doommake.file.maps=
+
+## Map Textures WAD
+## Sets the name of the output WAD for extracted textures. Created in build directory.
+## Leave blank for default.
+doommake.file.maptex=
+

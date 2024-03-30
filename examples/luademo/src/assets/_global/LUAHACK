@@ -1,0 +1,119 @@
+MT_HEALPOD = 153
+
+registerCodepointer("FastChase", function(actor)
+	if random() <= 63 then
+		-- Strafe
+		local sign = 1
+		if random() <= 127 then sign = -1 end
+		actor.momx = actor.momx + sign*8*cos(actor.angle+90)
+		actor.momy = actor.momy + sign*8*sin(actor.angle+90)
+	end
+	actor:call("Chase")
+end)
+
+registerCodepointer("Leap", function(actor)
+	actor.momx = actor.momx + 40*cos(actor.angle)
+	actor.momy = actor.momy + 40*sin(actor.angle)
+	actor.momz = 10
+end)
+
+registerCodepointer("CustomBruisAttack", function(actor)
+	if not actor.target then
+		return
+	end
+
+	if actor:checkMeleeRange() then
+		actor:call("MonsterMeleeAttack", 10, 8, 55)
+		return
+	end
+	actor:call("MonsterProjectile", 17, tofixed(60*(random()/255)-30))
+	actor:call("MonsterProjectile", 152, tofixed(60*(random()/255)-30))
+	if getGameSkill() > SK_BABY then
+		actor:call("MonsterProjectile", 152, tofixed(60*(random()/255)-30))
+		actor:call("MonsterProjectile", 152, tofixed(60*(random()/255)-30))
+	end
+end)
+
+registerCodepointer("HardJump", function(actor, stateNum)
+	if getGameSkill() >= SK_HARD then
+		actor:setState(stateNum)
+	end
+end)
+
+registerCodepointer("CustomVileChase", function(actor, selfHealState)
+	if actor.health <= actor.spawnhealth/2
+	and actor.target and actor.target.type ~= MT_HEALPOD
+	and random() <= 3 then
+		for mobj in getMobjs() do
+			if mobj.type == MT_HEALPOD then
+				actor.target = mobj
+				break
+			end
+		end
+	end
+	if actor.target and actor.target.type == MT_HEALPOD then
+		if aproxDistance(actor.x-actor.target.x, actor.y-actor.target.y) <= actor.meleerange then
+			actor:setState(selfHealState)
+			return
+		end
+		-- Hack: temporarily make target shootable so the monster won't stop chasing it
+		actor.target.flags = setFlag(actor.target.flags, MF_SHOOTABLE, true)
+		-- Hack to force monster to not attack
+		-- Bug: prevents it from moving in NM/-fast
+		actor.flags = setFlag(actor.flags, MF_JUSTATTACKED, true)
+		actor:call("VileChase")
+		actor.target.flags = setFlag(actor.target.flags, MF_SHOOTABLE, false)
+		return
+	end
+	actor:call("VileChase")
+end)
+
+registerCodepointer("VileSelfHeal", function(actor)
+	actor.health = math.min(actor.health + 4, actor.spawnhealth)
+	if actor.health == actor.spawnhealth then
+		-- Clear target to prevent infinite recursion between states
+		actor.target = nil
+		actor:setState(actor.seestate)
+	end
+end)
+
+registerCodepointer("CustomVileTarget", function(actor)
+	if not actor.target then
+		return
+	end
+
+	actor:call("FaceTarget")
+
+	if actor:checkSight(actor.target) then
+		-- Spawn BFG spray
+		actor.target:call("SpawnObject", 43, nil, tofixed(5), nil, tofixed(20))
+	end
+end)
+
+registerCodepointer("CustomVileAttack", function(actor)
+	if not actor.target then
+		return
+	end
+
+	actor:call("FaceTarget")
+
+	if not actor:checkSight(actor.target) then
+		return
+	end
+
+	actor:callMisc("PlaySound", 82)
+	actor.target.momz = 500/actor.target.mass
+	actor.target:radiusAttack(actor, 25, 50)
+end)
+
+registerCodepointer("PlayerHop", function(player, psp)
+	player.mo:callMisc("PlaySound", 12)
+	player.mo.momz = 1000/player.mo.mass
+end)
+
+registerCodepointer("SuperPunch", function(player, psp)
+	if player:getPower(POWERS_RAD) ~= 0 then
+		player:call(psp, "WeaponProjectile", 151)
+	end
+	player:call(psp, "Punch")
+end)

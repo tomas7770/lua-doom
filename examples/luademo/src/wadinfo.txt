@@ -1,0 +1,50 @@
+===========================================================================
+Advanced engine needed  : LuaDoom
+===========================================================================
+Title                   : LuaDoom demo
+Filename                : luademo.WAD
+Author                  : tomas7770 (GitHub username)
+
+Description             : Showcase of the Lua scripting capabilities of LuaDoom.
+
+Additional Credits to   : SuperTux, FreeDoom developers (some assets)
+===========================================================================
+* What is included *
+
+New levels              : 1
+Sounds                  : Yes
+Music                   : No
+Graphics                : Yes
+Dehacked/BEX Patch      : Yes
+Demos                   : No
+Other                   : LUAHACK lump
+
+
+* Play Information *
+
+Game                    : Doom 2
+Map #                   : MAP01
+Single Player           : Designed for
+Cooperative 2-4 Player  : No
+Deathmatch 2-4 Player   : No
+Other game styles       : 
+Difficulty Settings     : Yes
+
+
+* Construction *
+
+Base                    : New from scratch
+Editor(s) used          : Ultimate Doom Builder, SLADE, DoomMake, others
+Known Bugs              : WIP
+May Not Run With        : All source ports but LuaDoom
+Tested With             : LuaDoom dev version
+
+
+* Copyright / Permissions *
+
+See LuaDoom license.
+
+
+* Where to get the file that this text file describes *
+
+Included with the LuaDoom source code
